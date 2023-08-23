@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PatientMedicalHistory = exports.MedicalRecord = exports.MedicalAppointment = exports.Doctor = exports.Patient = exports.User = void 0;
+var user_entity_1 = require("./user.entity");
+Object.defineProperty(exports, "User", { enumerable: true, get: function () { return user_entity_1.User; } });
+var patient_entity_1 = require("./patient.entity");
+Object.defineProperty(exports, "Patient", { enumerable: true, get: function () { return patient_entity_1.Patient; } });
+var doctor_entity_1 = require("./doctor.entity");
+Object.defineProperty(exports, "Doctor", { enumerable: true, get: function () { return doctor_entity_1.Doctor; } });
+var medical_appointment_entity_1 = require("./medical.appointment.entity");
+Object.defineProperty(exports, "MedicalAppointment", { enumerable: true, get: function () { return medical_appointment_entity_1.MedicalAppointment; } });
+var medical_record_entity_1 = require("./medical.record.entity");
+Object.defineProperty(exports, "MedicalRecord", { enumerable: true, get: function () { return medical_record_entity_1.MedicalRecord; } });
+var patient_medical_history_entity_1 = require("./patient.medical.history.entity");
+Object.defineProperty(exports, "PatientMedicalHistory", { enumerable: true, get: function () { return patient_medical_history_entity_1.PatientMedicalHistory; } });
