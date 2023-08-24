@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.schemaValidator = void 0;
+const msgs_1 = require("../constants/msgs");
 const app_error_1 = require("../utils/app.error");
 const schemaValidator = (schema) => {
     return async (req, _res, next) => {
@@ -10,13 +11,17 @@ const schemaValidator = (schema) => {
         });
         if (!results.success) {
             const errors = results.error.issues.map((issue) => {
+                if (issue.message === msgs_1.MESSAGES.DATE_OF_BIRTH_DEFAULT_ERROR) {
+                    issue.message = msgs_1.MESSAGES.DATE_OF_BIRTH_INVALID_DATE;
+                }
                 return {
                     code: issue.code,
                     path: issue.path,
                     message: issue.message
                 };
             });
-            return next(new app_error_1.AppError(errors, 400));
+            next(new app_error_1.AppError(errors, 400));
+            return;
         }
         req.safeData = results.data;
         next();

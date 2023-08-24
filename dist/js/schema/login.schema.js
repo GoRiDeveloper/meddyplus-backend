@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.loginSchema = void 0;
+const validator_1 = __importDefault(require("validator"));
 const zod_1 = __importDefault(require("zod"));
 const msgs_1 = require("../constants/msgs");
 const entities_factory_1 = require("../services/factory/entities.factory");
@@ -32,6 +33,13 @@ exports.loginSchema = zod_1.default.object({
             required_error: msgs_1.MESSAGES.PASSWORD_REQUIRED_ERROR,
             invalid_type_error: msgs_1.MESSAGES.PASSWORD_TYPE_ERROR
         })
-            .min(5, { message: msgs_1.MESSAGES.PASSWORD_MIN_LENGTH })
+            .superRefine((val, ctx) => {
+            if (!validator_1.default.isStrongPassword(val)) {
+                ctx.addIssue({
+                    code: 'custom',
+                    message: msgs_1.MESSAGES.PASSWORD_TOO_WEAK
+                });
+            }
+        })
     })
 });

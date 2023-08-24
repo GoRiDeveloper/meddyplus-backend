@@ -11,6 +11,12 @@ const dbStartUp = async () => {
         console.log('❌ Error', error);
     }
 };
-dbStartUp().then(() => console.log('All good'));
-const server = app_1.app.listen(config_1.port, () => console.log('Server connected on port', config_1.port));
-server.on('error', (e) => console.error(`Server error: ${e}`));
+void dbStartUp().then(() => {
+    console.log('All good');
+});
+const server = app_1.app.listen(config_1.port, () => {
+    console.log('Server connected on port', config_1.port);
+});
+server.on('error', (e) => {
+    console.error('Server error', e);
+});

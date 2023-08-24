@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userSchema = void 0;
+const validator_1 = __importDefault(require("validator"));
 const zod_1 = __importDefault(require("zod"));
 const msgs_1 = require("../constants/msgs");
 const entities_factory_1 = require("../services/factory/entities.factory");
@@ -15,19 +16,21 @@ exports.userSchema = zod_1.default.object({
             required_error: msgs_1.MESSAGES.FIRST_NAME_REQUIRED_ERROR,
             invalid_type_error: msgs_1.MESSAGES.FIRST_NAME_TYPE_ERROR
         })
-            .min(2, { message: 'El nombre debe ser de mínimo 2 caracteres.' })
-            .max(50, { message: 'El nombre excede la longitud máxima.' })
+            .min(2, { message: msgs_1.MESSAGES.FIRST_NAME_MIN_LENGTH })
+            .max(50, { message: msgs_1.MESSAGES.FIRST_NAME_MAX_LENGTH })
             .trim()
-            .toLowerCase(),
+            .toLowerCase()
+            .regex(/^[^0-9]*$/, { message: msgs_1.MESSAGES.FIRST_NAME_PURE_STRING }),
         lastName: zod_1.default
             .string({
             required_error: msgs_1.MESSAGES.LAST_NAME_REQUIRED_ERROR,
             invalid_type_error: msgs_1.MESSAGES.LAST_NAME_TYPE_ERROR
         })
-            .min(3, { message: 'El apellido debe ser de mínimo 2 caracteres.' })
-            .max(70, { message: 'El apellido excede la longitud máxima.' })
+            .min(2, { message: msgs_1.MESSAGES.LAST_NAME_MIN_LENGTH })
+            .max(70, { message: msgs_1.MESSAGES.LAST_NAME_MAX_LENGTH })
             .trim()
-            .toLowerCase(),
+            .toLowerCase()
+            .regex(/^[^0-9]*$/, { message: msgs_1.MESSAGES.LAST_NAME_PURE_STRING }),
         email: zod_1.default
             .string({
             required_error: msgs_1.MESSAGES.EMAIL_REQUIRED_ERROR,
@@ -44,7 +47,7 @@ exports.userSchema = zod_1.default.object({
             if (userExists)
                 ctx.addIssue({
                     code: zod_1.default.ZodIssueCode.custom,
-                    message: 'El email ya esta registrado.'
+                    message: msgs_1.MESSAGES.EMAIL_ALREADY_REGISTERED
                 });
         }),
         genre: zod_1.default.enum([user_types_1.UserGenre.female, user_types_1.UserGenre.male], {
@@ -61,13 +64,28 @@ exports.userSchema = zod_1.default.object({
             invalid_type_error: msgs_1.MESSAGES.TELEPHONE_TYPE_ERROR
         })
             .min(10, { message: msgs_1.MESSAGES.TELEPHONE_MIN_LENGTH })
-            .max(10, { message: msgs_1.MESSAGES.TELEPHONE_MAX_LENGTH }),
+            .max(10, { message: msgs_1.MESSAGES.TELEPHONE_MAX_LENGTH })
+            .superRefine((val, ctx) => {
+            if (!validator_1.default.isNumeric(val)) {
+                ctx.addIssue({
+                    code: 'custom',
+                    message: msgs_1.MESSAGES.TELEPHONE_ONLY_NUMBERS
+                });
+            }
+        }),
         password: zod_1.default
             .string({
             required_error: msgs_1.MESSAGES.PASSWORD_REQUIRED_ERROR,
             invalid_type_error: msgs_1.MESSAGES.PASSWORD_TYPE_ERROR
         })
-            .min(5, { message: 'La contraseña debe ser de mínimo 5 caracteres' }),
+            .superRefine((val, ctx) => {
+            if (!validator_1.default.isStrongPassword(val)) {
+                ctx.addIssue({
+                    code: 'custom',
+                    message: msgs_1.MESSAGES.PASSWORD_TOO_WEAK
+                });
+            }
+        }),
         dateOfBirth: zod_1.default.coerce.date()
     })
 });
