@@ -33,6 +33,24 @@ class UserService {
             user: (0, user_dto_1.userDto)(user)
         };
     }
+    async updateUserPass(userToUpdate, passwords) {
+        const { currentPassword, newPassword } = passwords;
+        if (currentPassword === newPassword)
+            throw new app_error_1.AppError('Tu contraseña no puede ser la misma.', 400);
+        await (0, bcrypt_1.comparePasswords)(currentPassword, userToUpdate.password);
+        const encriptedPass = await (0, bcrypt_1.hashPassword)(newPassword);
+        const data = {
+            id: userToUpdate.id,
+            password: encriptedPass,
+            passwordChangedAt: new Date()
+        };
+        try {
+            await this.entityService.updateOne(data);
+        }
+        catch (e) {
+            throw new app_error_1.AppError('No se pudo cambiar la contraseña.', 400);
+        }
+    }
     async disableUser(id) {
         const data = { id, status: user_types_1.UserStatus.disable };
         try {

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.singIn = exports.signUp = void 0;
+exports.deleteUser = exports.updatePassword = exports.singIn = exports.signUp = void 0;
 const entities_factory_1 = require("../services/factory/entities.factory");
 const app_error_1 = require("../utils/app.error");
 const signUp = async (req, res, next) => {
@@ -12,10 +12,8 @@ const signUp = async (req, res, next) => {
         });
     }
     catch (err) {
-        if (!(err instanceof app_error_1.AppError)) {
-            next(new app_error_1.AppError('No Se Pudo Guardar El Usuario.', 500));
-            return;
-        }
+        if (!(err instanceof app_error_1.AppError))
+            return next(new app_error_1.AppError('No Se Pudo Guardar El Usuario.', 500));
         next(err);
     }
 };
@@ -38,6 +36,21 @@ const singIn = async (req, res, next) => {
     }
 };
 exports.singIn = singIn;
+const updatePassword = async (req, res, next) => {
+    try {
+        const { user, safeData } = req;
+        await entities_factory_1.userService.updateUserPass(user, safeData?.body);
+        return res.status(204).json({
+            status: 'success'
+        });
+    }
+    catch (err) {
+        if (!(err instanceof app_error_1.AppError))
+            return next(new app_error_1.AppError('No se pudo cambiar la contraseña.', 500));
+        next(err);
+    }
+};
+exports.updatePassword = updatePassword;
 // //Leer los usuarios
 // export const getUsers = async (
 //   req: Request,

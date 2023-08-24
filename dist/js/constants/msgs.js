@@ -30,7 +30,7 @@ var MESSAGES;
     MESSAGES["PASSWORD_REQUIRED_ERROR"] = "La contrase\u00F1a es requerida.";
     MESSAGES["PASSWORD_TYPE_ERROR"] = "La contrase\u00F1a debe ser un texto.";
     MESSAGES["PASSWORD_MIN_LENGTH"] = "La contrase\u00F1a debe ser de m\u00EDnimo 5 caracteres";
-    MESSAGES["PASSWORD_TOO_WEAK"] = "La contrase\u00F1a debe tener m\u00EDnimo 8 caracteres, al menos 1 n\u00FAmero, 1 may\u00FAscula, 1 m\u00EDnuscula y 1 caracter especial";
+    MESSAGES["PASSWORD_TOO_WEAK"] = "La contrase\u00F1a debe tener m\u00EDnimo 8 caracteres, al menos un n\u00FAmero, un may\u00FAscula, un m\u00EDnuscula y un caracter especial";
     MESSAGES["DATE_OF_BIRTH_INVALID_DATE"] = "La fecha indicada no existe";
     MESSAGES["DATE_OF_BIRTH_DEFAULT_ERROR"] = "Invalid date";
 })(MESSAGES || (exports.MESSAGES = MESSAGES = {}));

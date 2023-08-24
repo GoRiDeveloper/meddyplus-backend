@@ -18,6 +18,7 @@ let User = exports.User = class User extends typeorm_1.BaseEntity {
     lastName;
     email;
     password;
+    passwordChangedAt;
     dateOfBirth;
     telephone;
     roles;
@@ -44,6 +45,10 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'varchar' }),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'date', nullable: true, name: 'password_changed_at' }),
+    __metadata("design:type", Date)
+], User.prototype, "passwordChangedAt", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'date', name: 'date_of_birth' }),
     __metadata("design:type", Date)

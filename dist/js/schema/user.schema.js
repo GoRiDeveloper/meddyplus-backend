@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userSchema = void 0;
+exports.passwordsSchema = exports.userSchema = void 0;
 const validator_1 = __importDefault(require("validator"));
 const zod_1 = __importDefault(require("zod"));
 const msgs_1 = require("../constants/msgs");
@@ -78,8 +78,8 @@ exports.userSchema = zod_1.default.object({
             required_error: msgs_1.MESSAGES.PASSWORD_REQUIRED_ERROR,
             invalid_type_error: msgs_1.MESSAGES.PASSWORD_TYPE_ERROR
         })
-            .superRefine((val, ctx) => {
-            if (!validator_1.default.isStrongPassword(val)) {
+            .superRefine((password, ctx) => {
+            if (!validator_1.default.isStrongPassword(password)) {
                 ctx.addIssue({
                     code: 'custom',
                     message: msgs_1.MESSAGES.PASSWORD_TOO_WEAK
@@ -87,5 +87,26 @@ exports.userSchema = zod_1.default.object({
             }
         }),
         dateOfBirth: zod_1.default.coerce.date()
+    })
+});
+exports.passwordsSchema = zod_1.default.object({
+    body: zod_1.default.object({
+        currentPassword: zod_1.default.string({
+            required_error: msgs_1.MESSAGES.PASSWORD_REQUIRED_ERROR,
+            invalid_type_error: msgs_1.MESSAGES.PASSWORD_TYPE_ERROR
+        }),
+        newPassword: zod_1.default
+            .string({
+            required_error: msgs_1.MESSAGES.PASSWORD_REQUIRED_ERROR,
+            invalid_type_error: msgs_1.MESSAGES.PASSWORD_TYPE_ERROR
+        })
+            .superRefine((password, ctx) => {
+            if (!validator_1.default.isStrongPassword(password)) {
+                ctx.addIssue({
+                    code: 'custom',
+                    message: msgs_1.MESSAGES.PASSWORD_TOO_WEAK
+                });
+            }
+        })
     })
 });
