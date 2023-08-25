@@ -11,6 +11,6 @@ const auth_middleware_1 = require("../middlewares/auth.middleware");
 exports.userRouter = (0, express_1.Router)();
 exports.userRouter.use('/auth', auth_routes_1.authRouter);
 exports.userRouter.use('/:id', auth_middleware_1.protect, (0, schema_middleware_1.schemaValidator)(id_schema_1.idSchema), user_middleware_1.userExists, user_middleware_1.validateYourUser);
-// userRouter.get('users' getUsers )
-// userRouter.put('/users/:id', updateUser)
+// userRouter.get('/:id' getUsers )
+// userRouter.put('/:id', updateUser)
 exports.userRouter.delete('/:id', user_controller_1.deleteUser);

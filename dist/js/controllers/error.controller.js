@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendErrorProd = exports.sendErrorDev = void 0;
+const errorMsgs_1 = require("../constants/errorMsgs");
 const sendErrorDev = (err, res) => {
     return res.status(err.statusCode).json({
         status: err.status,
@@ -18,8 +19,8 @@ const sendErrorProd = (err, res) => {
             ...(err.errors && { errors: err.errors })
         });
     return res.status(500).json({
-        status: 'fail',
-        message: 'Algo Salio Mal :('
+        status: errorMsgs_1.ERROR_MSGS.FAIL,
+        message: errorMsgs_1.ERROR_MSGS.GENERIC_ERROR
     });
 };
 exports.sendErrorProd = sendErrorProd;

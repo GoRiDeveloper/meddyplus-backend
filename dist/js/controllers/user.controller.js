@@ -12,8 +12,10 @@ const signUp = async (req, res, next) => {
         });
     }
     catch (err) {
-        if (!(err instanceof app_error_1.AppError))
-            return next(new app_error_1.AppError('No Se Pudo Guardar El Usuario.', 500));
+        if (!(err instanceof app_error_1.AppError)) {
+            next(new app_error_1.AppError('No se pudo guardar el usuario.', 500));
+            return;
+        }
         next(err);
     }
 };
@@ -45,8 +47,10 @@ const updatePassword = async (req, res, next) => {
         });
     }
     catch (err) {
-        if (!(err instanceof app_error_1.AppError))
-            return next(new app_error_1.AppError('No se pudo cambiar la contraseña.', 500));
+        if (!(err instanceof app_error_1.AppError)) {
+            next(new app_error_1.AppError('No se pudo cambiar la contraseña.', 500));
+            return;
+        }
         next(err);
     }
 };

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.schemaValidator = void 0;
+const httpCodes_1 = require("../constants/httpCodes");
 const msgs_1 = require("../constants/msgs");
 const app_error_1 = require("../utils/app.error");
 const schemaValidator = (schema) => {
@@ -20,7 +21,7 @@ const schemaValidator = (schema) => {
                     message: issue.message
                 };
             });
-            next(new app_error_1.AppError(errors, 400));
+            next(new app_error_1.AppError(errors, httpCodes_1.HTTPCODES.BAD_REQUEST));
             return;
         }
         req.safeData = results.data;

@@ -8,6 +8,7 @@ const validator_1 = __importDefault(require("validator"));
 const zod_1 = __importDefault(require("zod"));
 const msgs_1 = require("../constants/msgs");
 const entities_factory_1 = require("../services/factory/entities.factory");
+const user_types_1 = require("../types/user.types");
 exports.loginSchema = zod_1.default.object({
     body: zod_1.default.object({
         email: zod_1.default
@@ -19,11 +20,11 @@ exports.loginSchema = zod_1.default.object({
             .trim()
             .toLowerCase()
             .superRefine(async (email, ctx) => {
-            const filters = { email };
+            const filters = { email, status: user_types_1.UserStatus.enable };
             const userExists = await entities_factory_1.userService.findUser(filters, false, false, false);
             if (!userExists) {
                 ctx.addIssue({
-                    code: 'custom',
+                    code: zod_1.default.ZodIssueCode.custom,
                     message: msgs_1.MESSAGES.EMAIL_NOT_REGISTERED
                 });
             }
@@ -36,7 +37,7 @@ exports.loginSchema = zod_1.default.object({
             .superRefine((val, ctx) => {
             if (!validator_1.default.isStrongPassword(val)) {
                 ctx.addIssue({
-                    code: 'custom',
+                    code: zod_1.default.ZodIssueCode.custom,
                     message: msgs_1.MESSAGES.PASSWORD_TOO_WEAK
                 });
             }

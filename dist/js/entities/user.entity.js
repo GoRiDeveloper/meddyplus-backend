@@ -21,7 +21,7 @@ let User = exports.User = class User extends typeorm_1.BaseEntity {
     passwordChangedAt;
     dateOfBirth;
     telephone;
-    roles;
+    role;
     status;
     genre;
 };
@@ -30,7 +30,7 @@ __decorate([
     __metadata("design:type", Number)
 ], User.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'varchar', length: 50 }),
+    (0, typeorm_1.Column)({ type: 'varchar', length: 50, name: 'first_name' }),
     __metadata("design:type", String)
 ], User.prototype, "firstName", void 0);
 __decorate([
@@ -60,7 +60,7 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({ type: 'enum', default: user_types_1.UserRole.patient, enum: user_types_1.UserRole }),
     __metadata("design:type", String)
-], User.prototype, "roles", void 0);
+], User.prototype, "role", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'enum', default: user_types_1.UserStatus.enable, enum: user_types_1.UserStatus }),
     __metadata("design:type", String)

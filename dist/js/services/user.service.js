@@ -1,12 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = void 0;
+const errorMsgs_1 = require("../constants/errorMsgs");
+const httpCodes_1 = require("../constants/httpCodes");
 const user_dto_1 = require("../dto/user.dto");
 const user_types_1 = require("../types/user.types");
+const app_error_1 = require("../utils/app.error");
 const bcrypt_1 = require("../utils/bcrypt");
+const highLevelRoles_1 = require("../utils/highLevelRoles");
 const jwt_1 = require("../utils/jwt");
 const entity_service_1 = require("./entity.service");
-const app_error_1 = require("../utils/app.error");
 class UserService {
     userRepository;
     entityService;
@@ -17,8 +20,14 @@ class UserService {
     async findUser(filters, attributes, relationAttributes, error) {
         return await this.entityService.findOne(filters, attributes, relationAttributes, error);
     }
+    async findAllUsers(filters, attributes, relationAttributes) {
+        return await this.entityService.findAll(filters, attributes, relationAttributes);
+    }
     async createUser(user) {
         user.password = await (0, bcrypt_1.hashPassword)(user.password);
+        if (highLevelRoles_1.highLevelRoles.includes(user.role)) {
+            user.status = user_types_1.UserStatus.disable;
+        }
         const userCreated = (await this.entityService.create(user));
         return (0, user_dto_1.userDto)(userCreated);
     }
@@ -36,7 +45,7 @@ class UserService {
     async updateUserPass(userToUpdate, passwords) {
         const { currentPassword, newPassword } = passwords;
         if (currentPassword === newPassword)
-            throw new app_error_1.AppError('Tu contraseña no puede ser la misma.', 400);
+            throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.SAME_PASSWORD_EROR, httpCodes_1.HTTPCODES.BAD_REQUEST);
         await (0, bcrypt_1.comparePasswords)(currentPassword, userToUpdate.password);
         const encriptedPass = await (0, bcrypt_1.hashPassword)(newPassword);
         const data = {
@@ -48,7 +57,7 @@ class UserService {
             await this.entityService.updateOne(data);
         }
         catch (e) {
-            throw new app_error_1.AppError('No se pudo cambiar la contraseña.', 400);
+            throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.PASSWORD_CHANGE_ERROR, httpCodes_1.HTTPCODES.BAD_REQUEST);
         }
     }
     async disableUser(id) {
@@ -57,7 +66,7 @@ class UserService {
             await this.entityService.updateOne(data);
         }
         catch (e) {
-            throw new app_error_1.AppError('El usuario no pudo deshabilitarse.', 500);
+            throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.USER_DISABLE_ERROR, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR);
         }
     }
 }

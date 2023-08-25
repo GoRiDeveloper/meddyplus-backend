@@ -68,7 +68,7 @@ exports.userSchema = zod_1.default.object({
             .superRefine((val, ctx) => {
             if (!validator_1.default.isNumeric(val)) {
                 ctx.addIssue({
-                    code: 'custom',
+                    code: zod_1.default.ZodIssueCode.custom,
                     message: msgs_1.MESSAGES.TELEPHONE_ONLY_NUMBERS
                 });
             }
@@ -81,7 +81,7 @@ exports.userSchema = zod_1.default.object({
             .superRefine((password, ctx) => {
             if (!validator_1.default.isStrongPassword(password)) {
                 ctx.addIssue({
-                    code: 'custom',
+                    code: zod_1.default.ZodIssueCode.custom,
                     message: msgs_1.MESSAGES.PASSWORD_TOO_WEAK
                 });
             }
@@ -103,7 +103,7 @@ exports.passwordsSchema = zod_1.default.object({
             .superRefine((password, ctx) => {
             if (!validator_1.default.isStrongPassword(password)) {
                 ctx.addIssue({
-                    code: 'custom',
+                    code: zod_1.default.ZodIssueCode.custom,
                     message: msgs_1.MESSAGES.PASSWORD_TOO_WEAK
                 });
             }

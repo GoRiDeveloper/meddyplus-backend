@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EntityService = void 0;
+const errorMsgs_1 = require("../constants/errorMsgs");
+const httpCodes_1 = require("../constants/httpCodes");
 const app_error_1 = require("../utils/app.error");
 class EntityService {
     entityRepository;
@@ -21,7 +23,7 @@ class EntityService {
             ...(relationAttributes && { relations: relationAttributes })
         });
         if (!entity && error)
-            throw new app_error_1.AppError('No Se Encontro El Recurso.', 404);
+            throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.RESOURCE_NOT_FOUND, httpCodes_1.HTTPCODES.NOT_FOUND);
         return entity;
     }
     async create(data) {
@@ -30,7 +32,7 @@ class EntityService {
             return await this.entityRepository.save(created, { listeners: false });
         }
         catch (e) {
-            throw new app_error_1.AppError('No se pudo crear el recurso en la base de datos.', 500);
+            throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.RESOURCE_CREATION_ERROR, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR);
         }
     }
     async updateOne(data) {
