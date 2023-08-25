@@ -25,13 +25,8 @@ exports.dbConfig = Object.freeze({
     logging: false,
     synchronize: true,
     ssl: {
-<<<<<<< HEAD
         ca: ENV.SSL_CERT,
         rejectUnauthorized: false
-=======
-       ca: ENV.SSL_CERT,
-       rejectUnauthorized: false
->>>>>>> 067217d93fead153214e865657aa1371c1768c07
     },
     entities: [
         entities_1.User,
