@@ -3,6 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MESSAGES = void 0;
 var MESSAGES;
 (function (MESSAGES) {
+    MESSAGES["SUCCESS"] = "success";
+    MESSAGES["ADMIN"] = "admin";
+    MESSAGES["PATIENT"] = "patient";
+    MESSAGES["DOCTOR"] = "doctor";
+    MESSAGES["ENABLE"] = "enable";
+    MESSAGES["DISABLE"] = "disable";
+    MESSAGES["MALE"] = "male";
+    MESSAGES["FEMALE"] = "female";
     MESSAGES["FIRST_NAME_REQUIRED_ERROR"] = "El nombre es requerido.";
     MESSAGES["FIRST_NAME_TYPE_ERROR"] = "El nombre debe ser un texto.";
     MESSAGES["FIRST_NAME_MIN_LENGTH"] = "El nombre debe ser de m\u00EDnimo 2 caracteres.";

@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendErrorProd = exports.sendErrorDev = void 0;
 const errorMsgs_1 = require("../constants/errorMsgs");
+const httpCodes_1 = require("../constants/httpCodes");
 const sendErrorDev = (err, res) => {
     return res.status(err.statusCode).json({
         status: err.status,
@@ -18,7 +19,7 @@ const sendErrorProd = (err, res) => {
             ...(err.message && { message: err.message }),
             ...(err.errors && { errors: err.errors })
         });
-    return res.status(500).json({
+    return res.status(httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR).json({
         status: errorMsgs_1.ERROR_MSGS.FAIL,
         message: errorMsgs_1.ERROR_MSGS.GENERIC_ERROR
     });

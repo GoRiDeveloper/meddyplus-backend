@@ -1,19 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.updatePassword = exports.singIn = exports.signUp = void 0;
+const errorMsgs_1 = require("../constants/errorMsgs");
+const httpCodes_1 = require("../constants/httpCodes");
+const msgs_1 = require("../constants/msgs");
 const entities_factory_1 = require("../services/factory/entities.factory");
 const app_error_1 = require("../utils/app.error");
 const signUp = async (req, res, next) => {
     try {
         const user = await entities_factory_1.userService.createUser(req.safeData?.body);
-        return res.status(201).json({
-            status: 'success',
+        return res.status(httpCodes_1.HTTPCODES.CREATED).json({
+            status: msgs_1.MESSAGES.SUCCESS,
             user
         });
     }
     catch (err) {
         if (!(err instanceof app_error_1.AppError)) {
-            next(new app_error_1.AppError('No se pudo guardar el usuario.', 500));
+            next(new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.USER_SAVE_ERROR, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR));
             return;
         }
         next(err);
@@ -23,15 +26,15 @@ exports.signUp = signUp;
 const singIn = async (req, res, next) => {
     try {
         const { token, user } = await entities_factory_1.userService.signIn(req.safeData?.body);
-        return res.status(200).json({
-            status: 'success',
+        return res.status(httpCodes_1.HTTPCODES.OK).json({
+            status: msgs_1.MESSAGES.SUCCESS,
             token,
             user
         });
     }
     catch (err) {
         if (!(err instanceof app_error_1.AppError)) {
-            next(new app_error_1.AppError('No se pudo autenticar el usuario.', 500));
+            next(new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.USER_AUTHENTICATION_ERROR, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR));
             return;
         }
         next(err);
@@ -42,13 +45,13 @@ const updatePassword = async (req, res, next) => {
     try {
         const { user, safeData } = req;
         await entities_factory_1.userService.updateUserPass(user, safeData?.body);
-        return res.status(204).json({
-            status: 'success'
+        return res.status(httpCodes_1.HTTPCODES.NO_CONTENT).json({
+            status: msgs_1.MESSAGES.SUCCESS
         });
     }
     catch (err) {
         if (!(err instanceof app_error_1.AppError)) {
-            next(new app_error_1.AppError('No se pudo cambiar la contraseña.', 500));
+            next(new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.PASSWORD_CHANGE_ERROR, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR));
             return;
         }
         next(err);
@@ -90,13 +93,13 @@ exports.updatePassword = updatePassword;
 const deleteUser = async (req, res, next) => {
     try {
         await entities_factory_1.userService.disableUser(req.safeData?.params);
-        return res.status(204).json({
-            status: 'success'
+        return res.status(httpCodes_1.HTTPCODES.NO_CONTENT).json({
+            status: msgs_1.MESSAGES.SUCCESS
         });
     }
     catch (err) {
         if (!(err instanceof app_error_1.AppError)) {
-            next(new app_error_1.AppError('No se pudo autenticar el usuario.', 500));
+            next(new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.USER_AUTHENTICATION_ERROR, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR));
             return;
         }
         next(err);
