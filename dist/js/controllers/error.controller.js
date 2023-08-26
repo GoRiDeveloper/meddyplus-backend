@@ -4,7 +4,7 @@ exports.globalErrorHandler = void 0;
 const errorMsgs_1 = require("../constants/errorMsgs");
 const httpCodes_1 = require("../constants/httpCodes");
 const config_1 = require("../config/config");
-const globalErrorHandler = (err, _req, res) => {
+const globalErrorHandler = (err, _req, res, _next) => {
     err.statusCode = err.statusCode || httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR;
     err.status = err.status || errorMsgs_1.ERROR_MSGS.FAIL;
     if (config_1.mode === config_1.modes.dev)
