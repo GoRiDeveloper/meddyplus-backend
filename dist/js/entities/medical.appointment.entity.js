@@ -11,14 +11,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MedicalAppointment = void 0;
 const typeorm_1 = require("typeorm");
-const doctor_entity_1 = require("./doctor.entity");
-const patient_entity_1 = require("./patient.entity");
+const _1 = require(".");
 let MedicalAppointment = exports.MedicalAppointment = class MedicalAppointment extends typeorm_1.BaseEntity {
     id;
     description;
-    date;
-    doctor;
+    medicalAppointmentDate;
     patient;
+    date;
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)('increment'),
@@ -29,17 +28,18 @@ __decorate([
     __metadata("design:type", String)
 ], MedicalAppointment.prototype, "description", void 0);
 __decorate([
+    (0, typeorm_1.OneToOne)((_type) => _1.MedicalAppointmentDates),
+    (0, typeorm_1.JoinColumn)({ name: 'medical_appointment_date_id' }),
+    __metadata("design:type", Number)
+], MedicalAppointment.prototype, "medicalAppointmentDate", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)((_type) => _1.Patient, (patient) => patient.medicalAppointments),
+    __metadata("design:type", _1.Patient)
+], MedicalAppointment.prototype, "patient", void 0);
+__decorate([
     (0, typeorm_1.Column)({ type: 'date' }),
     __metadata("design:type", Date)
 ], MedicalAppointment.prototype, "date", void 0);
-__decorate([
-    (0, typeorm_1.ManyToOne)((_type) => doctor_entity_1.Doctor, (doctor) => doctor.medicalApointments),
-    __metadata("design:type", doctor_entity_1.Doctor)
-], MedicalAppointment.prototype, "doctor", void 0);
-__decorate([
-    (0, typeorm_1.ManyToOne)((_type) => patient_entity_1.Patient, (patient) => patient.medicalAppointments),
-    __metadata("design:type", patient_entity_1.Patient)
-], MedicalAppointment.prototype, "patient", void 0);
 exports.MedicalAppointment = MedicalAppointment = __decorate([
     (0, typeorm_1.Entity)({ name: 'medical_appointments' })
 ], MedicalAppointment);

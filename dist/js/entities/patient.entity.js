@@ -11,9 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Patient = void 0;
 const typeorm_1 = require("typeorm");
-const user_entity_1 = require("./user.entity");
-const medical_appointment_entity_1 = require("./medical.appointment.entity");
-const medical_record_entity_1 = require("./medical.record.entity");
+const _1 = require(".");
 let Patient = exports.Patient = class Patient extends typeorm_1.BaseEntity {
     id;
     user;
@@ -25,16 +23,16 @@ __decorate([
     __metadata("design:type", Number)
 ], Patient.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.OneToOne)((_type) => user_entity_1.User),
+    (0, typeorm_1.OneToOne)((_type) => _1.User),
     (0, typeorm_1.JoinColumn)({ name: 'user_id' }),
-    __metadata("design:type", user_entity_1.User)
+    __metadata("design:type", _1.User)
 ], Patient.prototype, "user", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)((_type) => medical_appointment_entity_1.MedicalAppointment, (medicalApointment) => medicalApointment.patient),
+    (0, typeorm_1.OneToMany)((_type) => _1.MedicalAppointment, (medicalApointment) => medicalApointment.patient),
     __metadata("design:type", Array)
 ], Patient.prototype, "medicalAppointments", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)((_type) => medical_record_entity_1.MedicalRecord, (medicalRecord) => medicalRecord.patient),
+    (0, typeorm_1.OneToMany)((_type) => _1.MedicalRecord, (medicalRecord) => medicalRecord.patient),
     __metadata("design:type", Array)
 ], Patient.prototype, "medicalRecords", void 0);
 exports.Patient = Patient = __decorate([

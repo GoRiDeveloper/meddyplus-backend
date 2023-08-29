@@ -11,6 +11,7 @@ var UserStatus;
 (function (UserStatus) {
     UserStatus["enable"] = "enable";
     UserStatus["disable"] = "disable";
+    UserStatus["pending"] = "pending";
 })(UserStatus || (exports.UserStatus = UserStatus = {}));
 var UserGenre;
 (function (UserGenre) {

@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PatientMedicalHistory = void 0;
 const typeorm_1 = require("typeorm");
+const _1 = require(".");
 let PatientMedicalHistory = exports.PatientMedicalHistory = class PatientMedicalHistory extends typeorm_1.BaseEntity {
     id;
     date;
@@ -18,6 +19,7 @@ let PatientMedicalHistory = exports.PatientMedicalHistory = class PatientMedical
     symptoms;
     treatments;
     medication;
+    medicalRecord;
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)('increment'),
@@ -43,6 +45,11 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'varchar' }),
     __metadata("design:type", String)
 ], PatientMedicalHistory.prototype, "medication", void 0);
+__decorate([
+    (0, typeorm_1.OneToOne)((_type) => _1.MedicalRecord),
+    (0, typeorm_1.JoinColumn)({ name: 'medical_record_id' }),
+    __metadata("design:type", Number)
+], PatientMedicalHistory.prototype, "medicalRecord", void 0);
 exports.PatientMedicalHistory = PatientMedicalHistory = __decorate([
     (0, typeorm_1.Entity)({ name: 'patients_medical_history' })
 ], PatientMedicalHistory);

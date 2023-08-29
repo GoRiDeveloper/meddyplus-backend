@@ -11,15 +11,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Doctor = void 0;
 const typeorm_1 = require("typeorm");
-const medical_appointment_entity_1 = require("./medical.appointment.entity");
-const medical_record_entity_1 = require("./medical.record.entity");
 const user_entity_1 = require("./user.entity");
+const medical_appointmet_dates_entity_1 = require("./medical.appointmet.dates.entity");
 let Doctor = exports.Doctor = class Doctor extends typeorm_1.BaseEntity {
     id;
     user;
-    medicalApointments;
-    medicalRecords;
-    speciality;
+    medicalAppointmentDates;
+    specialty;
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)('increment'),
@@ -31,17 +29,13 @@ __decorate([
     __metadata("design:type", user_entity_1.User)
 ], Doctor.prototype, "user", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)((_type) => medical_appointment_entity_1.MedicalAppointment, (medicalAppointment) => medicalAppointment.doctor),
+    (0, typeorm_1.OneToMany)((_type) => medical_appointmet_dates_entity_1.MedicalAppointmentDates, (medicalAppointmentsDates) => medicalAppointmentsDates),
     __metadata("design:type", Array)
-], Doctor.prototype, "medicalApointments", void 0);
-__decorate([
-    (0, typeorm_1.OneToMany)((_type) => medical_record_entity_1.MedicalRecord, (medicalRecord) => medicalRecord.doctor),
-    __metadata("design:type", Array)
-], Doctor.prototype, "medicalRecords", void 0);
+], Doctor.prototype, "medicalAppointmentDates", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar' }),
     __metadata("design:type", String)
-], Doctor.prototype, "speciality", void 0);
+], Doctor.prototype, "specialty", void 0);
 exports.Doctor = Doctor = __decorate([
     (0, typeorm_1.Entity)({ name: 'doctors' })
 ], Doctor);

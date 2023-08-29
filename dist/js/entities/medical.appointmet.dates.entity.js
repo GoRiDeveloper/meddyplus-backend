@@ -9,31 +9,36 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MedicalRecord = void 0;
+exports.MedicalAppointmentDates = void 0;
 const typeorm_1 = require("typeorm");
-const _1 = require("./");
-let MedicalRecord = exports.MedicalRecord = class MedicalRecord extends typeorm_1.BaseEntity {
+const medical_appointments_dates_types_1 = require("../types/medical.appointments.dates.types");
+const doctor_entity_1 = require("./doctor.entity");
+let MedicalAppointmentDates = exports.MedicalAppointmentDates = class MedicalAppointmentDates extends typeorm_1.BaseEntity {
     id;
     date;
-    description;
-    patient;
+    status;
+    doctor;
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)('increment'),
     __metadata("design:type", Number)
-], MedicalRecord.prototype, "id", void 0);
+], MedicalAppointmentDates.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'date' }),
     __metadata("design:type", Date)
-], MedicalRecord.prototype, "date", void 0);
+], MedicalAppointmentDates.prototype, "date", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'text' }),
+    (0, typeorm_1.Column)({
+        type: 'enum',
+        default: medical_appointments_dates_types_1.MedicalAppointmentDatesStatus.pending,
+        enum: medical_appointments_dates_types_1.MedicalAppointmentDatesStatus
+    }),
     __metadata("design:type", String)
-], MedicalRecord.prototype, "description", void 0);
+], MedicalAppointmentDates.prototype, "status", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)((_type) => _1.Patient, (patient) => patient.medicalRecords),
-    __metadata("design:type", _1.Patient)
-], MedicalRecord.prototype, "patient", void 0);
-exports.MedicalRecord = MedicalRecord = __decorate([
-    (0, typeorm_1.Entity)({ name: 'medical_records' })
-], MedicalRecord);
+    (0, typeorm_1.ManyToOne)((_type) => doctor_entity_1.Doctor, (doctor) => doctor.medicalAppointmentDates),
+    __metadata("design:type", doctor_entity_1.Doctor)
+], MedicalAppointmentDates.prototype, "doctor", void 0);
+exports.MedicalAppointmentDates = MedicalAppointmentDates = __decorate([
+    (0, typeorm_1.Entity)({ name: 'medical_appointments_dates' })
+], MedicalAppointmentDates);

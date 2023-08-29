@@ -34,4 +34,8 @@ var ERROR_MSGS;
     ERROR_MSGS["TOKEN_GENERATION_ERROR"] = "No se gener\u00F3 el token.";
     ERROR_MSGS["SERVER_ERROR"] = "Error en el servidor.";
     ERROR_MSGS["GET_DOCTORS_AND_ADMINS_ERROR"] = "No se pudo obtener los m\u00E9dicos ni los administradores.";
+    ERROR_MSGS["ADMIN_REGISTRATION_APPROVAL_ERROR"] = "Error al aprobar el registro del admin/doctor.";
+    ERROR_MSGS["ADMIN_REGISTRATION_APPROVAL_FAIL"] = "El admin/doctor ya ha sido aprobado previamente o no existe.";
+    ERROR_MSGS["ADMIN_REGISTRATION_CANCELATION_ERROR"] = "Error al deshabilitar un admin/doctor";
+    ERROR_MSGS["ADMIN_REGISTRATION_CANCELATION_FAIL"] = "El admin/doctor ya se encuentra deshabilitado o no existe.";
 })(ERROR_MSGS || (exports.ERROR_MSGS = ERROR_MSGS = {}));
