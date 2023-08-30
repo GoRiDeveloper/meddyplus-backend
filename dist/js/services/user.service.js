@@ -57,12 +57,9 @@ class UserService {
         const userToBeUpdated = await this.entityService.findOne(filters, attributes, false, false);
         if (!userToBeUpdated)
             throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.ADMIN_REGISTRATION_APPROVAL_FAIL, httpCodes_1.HTTPCODES.BAD_REQUEST);
-        const dataToUpdate = {
-            id: userId,
-            status: user_types_1.UserStatus.enable
-        };
+        userToBeUpdated.status = user_types_1.UserStatus.enable;
         try {
-            return await this.entityService.updateOne(dataToUpdate);
+            return await this.entityService.updateOne(userToBeUpdated);
         }
         catch (error) {
             throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.ADMIN_REGISTRATION_APPROVAL_ERROR, httpCodes_1.HTTPCODES.BAD_REQUEST);
