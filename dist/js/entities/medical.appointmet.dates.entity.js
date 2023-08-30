@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MedicalAppointmentDates = void 0;
 const typeorm_1 = require("typeorm");
-const medical_appointments_dates_types_1 = require("../types/medical.appointments.dates.types");
+const medical_appointment_dates_types_1 = require("../types/medical.appointment.dates.types");
 const doctor_entity_1 = require("./doctor.entity");
 let MedicalAppointmentDates = exports.MedicalAppointmentDates = class MedicalAppointmentDates extends typeorm_1.BaseEntity {
     id;
@@ -30,8 +30,8 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({
         type: 'enum',
-        default: medical_appointments_dates_types_1.MedicalAppointmentDatesStatus.pending,
-        enum: medical_appointments_dates_types_1.MedicalAppointmentDatesStatus
+        default: medical_appointment_dates_types_1.MedicalAppointmentDatesStatus.pending,
+        enum: medical_appointment_dates_types_1.MedicalAppointmentDatesStatus
     }),
     __metadata("design:type", String)
 ], MedicalAppointmentDates.prototype, "status", void 0);

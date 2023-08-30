@@ -11,8 +11,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Doctor = void 0;
 const typeorm_1 = require("typeorm");
-const user_entity_1 = require("./user.entity");
+const doctor_types_1 = require("../types/doctor.types");
 const medical_appointmet_dates_entity_1 = require("./medical.appointmet.dates.entity");
+const user_entity_1 = require("./user.entity");
 let Doctor = exports.Doctor = class Doctor extends typeorm_1.BaseEntity {
     id;
     user;
@@ -33,7 +34,7 @@ __decorate([
     __metadata("design:type", Array)
 ], Doctor.prototype, "medicalAppointmentDates", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'varchar' }),
+    (0, typeorm_1.Column)({ type: 'varchar', default: doctor_types_1.DoctorSpecialty.general }),
     __metadata("design:type", String)
 ], Doctor.prototype, "specialty", void 0);
 exports.Doctor = Doctor = __decorate([

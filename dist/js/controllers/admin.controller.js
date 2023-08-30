@@ -8,8 +8,8 @@ const entities_factory_1 = require("../services/factory/entities.factory");
 const app_error_1 = require("../utils/app.error");
 const approveDoctorsAndAdminsRegistration = async (req, res, next) => {
     try {
-        const { userId } = req.safeData?.params;
-        const updatedUser = await entities_factory_1.userService.approveAdminDocsRegistration(userId);
+        const { id } = req.safeData?.params;
+        const updatedUser = await entities_factory_1.userService.approveAdminDocsRegistration(id);
         return res.status(httpCodes_1.HTTPCODES.OK).json({
             status: msgs_1.MESSAGES.SUCCESS,
             message: msgs_1.MESSAGES.ADMIN_REGISTRATION_APPROVAL_OK,
@@ -27,19 +27,10 @@ const approveDoctorsAndAdminsRegistration = async (req, res, next) => {
 exports.approveDoctorsAndAdminsRegistration = approveDoctorsAndAdminsRegistration;
 const cancelDoctorsAndAdminsRegistration = async (req, res, next) => {
     try {
-        const { userId } = req.params;
-        const canceledUser = await entities_factory_1.userService.cancelAdminDocsRegistration(Number(userId));
-        if (canceledUser == null) {
-            return res.status(httpCodes_1.HTTPCODES.BAD_REQUEST).json({
-                status: errorMsgs_1.ERROR_MSGS.FAIL,
-                message: errorMsgs_1.ERROR_MSGS.ADMIN_REGISTRATION_CANCELATION_FAIL,
-                canceledUser
-            });
-        }
-        return res.status(httpCodes_1.HTTPCODES.OK).json({
-            status: msgs_1.MESSAGES.SUCCESS,
-            message: msgs_1.MESSAGES.ADMIN_REGISTRATION_CANCELATION_OK,
-            canceledUser
+        const { id } = req.safeData?.params;
+        await entities_factory_1.userService.cancelAdminDocsRegistration(id);
+        return res.status(httpCodes_1.HTTPCODES.NO_CONTENT).json({
+            status: msgs_1.MESSAGES.SUCCESS
         });
     }
     catch (err) {

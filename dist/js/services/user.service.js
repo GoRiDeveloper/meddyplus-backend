@@ -66,6 +66,10 @@ class UserService {
         }
     }
     async cancelAdminDocsRegistration(userId) {
+        const filters = {
+            id: userId,
+            status: (0, typeorm_1.In)([user_types_1.UserStatus.pending, user_types_1.UserStatus.enable])
+        };
         const attributes = {
             firstName: true,
             lastName: true,
@@ -74,26 +78,11 @@ class UserService {
             role: true,
             id: true
         };
-        const userToBeCanceled = await this.entityService.findOne({ id: userId }, attributes, false, false);
-        if (userToBeCanceled == null) {
-            return null;
+        const userToBeCanceled = await this.entityService.findOne(filters, attributes, false, false);
+        if (!userToBeCanceled) {
+            throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.ADMIN_REGISTRATION_CANCELATION_FAIL, httpCodes_1.HTTPCODES.NOT_FOUND);
         }
-        else {
-            if (userToBeCanceled?.status === user_types_1.UserStatus.enable) {
-                try {
-                    await this.disableUser(Number(userId));
-                    const updatedUser = { ...userToBeCanceled };
-                    updatedUser.status = user_types_1.UserStatus.disable;
-                    return {
-                        ...updatedUser
-                    };
-                }
-                catch (error) {
-                    throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.ADMIN_REGISTRATION_APPROVAL_ERROR, httpCodes_1.HTTPCODES.BAD_REQUEST);
-                }
-            }
-        }
-        return null;
+        await this.disableUser(Number(userId));
     }
     async createUser(user) {
         const assignedUser = (0, check_role_for_assignment_1.checkRoleForAssignment)(user);
