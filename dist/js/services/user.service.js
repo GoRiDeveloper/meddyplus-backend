@@ -32,10 +32,13 @@ class UserService {
             }
         ];
         const attributes = {
+            dateOfBirth: true,
+            telephone: true,
             firstName: true,
             lastName: true,
             status: true,
             email: true,
+            genre: true,
             role: true,
             id: true
         };
