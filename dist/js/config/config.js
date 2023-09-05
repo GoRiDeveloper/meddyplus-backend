@@ -7,10 +7,10 @@ const ENV = process.env;
 exports.mode = ENV.NODE_ENV;
 exports.port = ENV.PORT ?? 4444;
 exports.salt = Number(ENV.SALT);
-exports.ACCEPTED_ORIGIN = ['https://meddyplus.netlify.app', [
+exports.ACCEPTED_ORIGIN = [
     'http://localhost:3000',
     'https://meddyplus.netlify.app'
-]];
+];
 exports.ACCEPTED_METHODS = ['GET', 'POST', 'PATCH', 'DELETE'];
 exports.modes = Object.freeze({
     dev: 'development',
