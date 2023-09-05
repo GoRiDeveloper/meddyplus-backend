@@ -4,8 +4,9 @@ exports.doctorRouter = void 0;
 const express_1 = require("express");
 const schema_middleware_1 = require("../middlewares/schema.middleware");
 const medical_appointments_dates_schema_1 = require("../schema/medical.appointments.dates.schema");
-// import { protect, restrictTo } from '../middlewares/auth.middleware'
-// import { UserRole } from '../types/user.types'
+const medical_appointment_dates_controller_1 = require("../controllers/medical.appointment.dates.controller");
+const auth_middleware_1 = require("../middlewares/auth.middleware");
+const user_types_1 = require("../types/user.types");
 exports.doctorRouter = (0, express_1.Router)();
-// adminRouter.use(protect, restrictTo(UserRole.doctor))
-exports.doctorRouter.post('/assign-available-dates', (0, schema_middleware_1.schemaValidator)(medical_appointments_dates_schema_1.medicalAppointmentsDatesSchema));
+exports.doctorRouter.use(auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)(user_types_1.UserRole.doctor));
+exports.doctorRouter.post('/assign-available-dates', (0, schema_middleware_1.schemaValidator)(medical_appointments_dates_schema_1.medicalAppointmentsDatesSchema), medical_appointment_dates_controller_1.createDates);

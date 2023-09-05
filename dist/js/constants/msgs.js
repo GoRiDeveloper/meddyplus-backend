@@ -46,4 +46,8 @@ var MESSAGES;
     MESSAGES["DATE_OF_BIRTH_DEFAULT_ERROR"] = "Invalid date";
     MESSAGES["DB_START_UP_OK"] = "Base de datos levantada correctamente.";
     MESSAGES["SERVER_CONNECTED_ON_PORT"] = "Servidor conectado en el puerto";
+    MESSAGES["MEDICAL_APPOINTMENT_DESC_REQUIRED"] = "La descripci\u00F3n es requerida.";
+    MESSAGES["MEDICAL_APPOINTMENT_DESC_MIN_LENGTH"] = "La descripci\u00F3n debe ser m\u00E1s espec\u00EDfica.";
+    MESSAGES["MEDICAL_APPOINTMENT_DESC_TYPE"] = "La descrici\u00F3n debe ser un texto.";
+    MESSAGES["MEDICAL_APPOINTMENT_DATE_CREATED"] = "Tus fechas de cita m\u00E9dica se crearon correctamente.";
 })(MESSAGES || (exports.MESSAGES = MESSAGES = {}));

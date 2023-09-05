@@ -7,7 +7,10 @@ const ENV = process.env;
 exports.mode = ENV.NODE_ENV;
 exports.port = ENV.PORT ?? 4444;
 exports.salt = Number(ENV.SALT);
-exports.ACCEPTED_ORIGIN = 'http://localhost:3000';
+exports.ACCEPTED_ORIGIN = [
+    'http://localhost:3000',
+    'https://meddyplus.netlify.app'
+];
 exports.ACCEPTED_METHODS = ['GET', 'POST', 'PATCH', 'DELETE'];
 exports.modes = Object.freeze({
     dev: 'development',
@@ -26,12 +29,12 @@ exports.dbConfig = Object.freeze({
     database: ENV.DB_NAME,
     logging: false,
     synchronize: true,
-    ...(exports.mode === exports.modes.prod && {
-        ssl: {
-            ca: ENV.SSL_CERT,
-            rejectUnauthorized: false
-        }
-    }),
+    // ...(mode === modes.prod && {
+    //   ssl: {
+    //     ca: ENV.SSL_CERT,
+    //     rejectUnauthorized: false
+    //   }
+    // }),
     entities: [
         entities_1.User,
         entities_1.Patient,

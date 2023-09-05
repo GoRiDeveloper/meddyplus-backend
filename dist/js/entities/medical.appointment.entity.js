@@ -17,7 +17,6 @@ let MedicalAppointment = exports.MedicalAppointment = class MedicalAppointment e
     description;
     medicalAppointmentDate;
     patient;
-    date;
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)('increment'),
@@ -30,16 +29,12 @@ __decorate([
 __decorate([
     (0, typeorm_1.OneToOne)((_type) => _1.MedicalAppointmentDates),
     (0, typeorm_1.JoinColumn)({ name: 'medical_appointment_date_id' }),
-    __metadata("design:type", Number)
+    __metadata("design:type", _1.MedicalAppointmentDates)
 ], MedicalAppointment.prototype, "medicalAppointmentDate", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)((_type) => _1.Patient, (patient) => patient.medicalAppointments),
     __metadata("design:type", _1.Patient)
 ], MedicalAppointment.prototype, "patient", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ type: 'date' }),
-    __metadata("design:type", Date)
-], MedicalAppointment.prototype, "date", void 0);
 exports.MedicalAppointment = MedicalAppointment = __decorate([
     (0, typeorm_1.Entity)({ name: 'medical_appointments' })
 ], MedicalAppointment);

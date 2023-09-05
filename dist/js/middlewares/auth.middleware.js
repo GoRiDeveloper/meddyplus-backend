@@ -27,11 +27,11 @@ const protect = async (req, _res, next) => {
         next(new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.TOKEN_NOT_DECODED, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR));
         return;
     }
-    const attributes = {
-        password: false,
-        status: false
-    };
-    const userExists = await entities_factory_1.userService.findUser({ id: decoded.id }, attributes, false, false);
+    // const attributes = {
+    //   password: false,
+    //   status: false
+    // }
+    const userExists = await entities_factory_1.userService.findUser({ id: decoded.id }, false, false, false);
     if (!userExists) {
         next(new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.TOKEN_USER_NOT_FOUND, httpCodes_1.HTTPCODES.NOT_FOUND));
         return;

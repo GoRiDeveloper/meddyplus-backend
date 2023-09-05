@@ -24,7 +24,17 @@ const schemaValidator = (schema) => {
             next(new app_error_1.AppError(errors, httpCodes_1.HTTPCODES.BAD_REQUEST));
             return;
         }
-        req.safeData = results.data;
+        if (req.safeData?.params || req.safeData?.body) {
+            const { params, body } = req.safeData;
+            req.safeData = results.data;
+            if (params)
+                req.safeData.params = params;
+            if (body)
+                req.safeData.body = body;
+        }
+        else {
+            req.safeData = results.data;
+        }
         next();
     };
 };

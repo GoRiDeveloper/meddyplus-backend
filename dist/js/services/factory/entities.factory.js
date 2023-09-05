@@ -1,15 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.medicalAppointmentDatesService = exports.userService = void 0;
+exports.patientService = exports.medicalAppointmentService = exports.doctorService = exports.medicalAppointmentDatesService = exports.userService = void 0;
 const entities_1 = require("../../entities");
 const database_config_1 = require("../database/database.config");
-const user_service_1 = require("../user.service");
+const doctor_service_1 = require("../doctor.service");
 const medical_appointment_dates_service_1 = require("../medical.appointment.dates.service");
+const user_service_1 = require("../user.service");
+const patient_service_1 = require("../patient.service");
+const medical_appointment_service_1 = require("../medical.appointment.service");
 const userRepository = database_config_1.AppDataSrc.getRepository(entities_1.User);
-// const patientRepository: Repository<Patient> = AppDataSrc.getRepository(Patient)
-// const doctorRepository: Repository<Doctor> = AppDataSrc.getRepository(Doctor)
+const patientRepository = database_config_1.AppDataSrc.getRepository(entities_1.Patient);
+const doctorRepository = database_config_1.AppDataSrc.getRepository(entities_1.Doctor);
 const medicalAppointmentDatesRespository = database_config_1.AppDataSrc.getRepository(entities_1.MedicalAppointmentDates);
+const medicalAppointmentRepository = database_config_1.AppDataSrc.getRepository(entities_1.MedicalAppointment);
 (() => {
     exports.userService = new user_service_1.UserService(userRepository);
     exports.medicalAppointmentDatesService = new medical_appointment_dates_service_1.MedicalAppointmentDatesService(medicalAppointmentDatesRespository);
+    exports.doctorService = new doctor_service_1.DoctorService(doctorRepository);
+    exports.medicalAppointmentService = new medical_appointment_service_1.MedicalAppointmentService(medicalAppointmentRepository);
+    exports.patientService = new patient_service_1.PatientService(patientRepository);
 })();

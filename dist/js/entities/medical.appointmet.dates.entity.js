@@ -24,8 +24,8 @@ __decorate([
     __metadata("design:type", Number)
 ], MedicalAppointmentDates.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'date' }),
-    __metadata("design:type", Date)
+    (0, typeorm_1.Column)({ type: 'varchar' }),
+    __metadata("design:type", String)
 ], MedicalAppointmentDates.prototype, "date", void 0);
 __decorate([
     (0, typeorm_1.Column)({
