@@ -29,7 +29,13 @@ class MedicalAppointmentService {
         //crear el paciente en la tabla de patients
         let patient;
         try {
-            patient = await entities_factory_1.patientService.createPatient(patientToCreate);
+            const patientExists = await entities_factory_1.patientService.findPatient({ user: { id: sessionUser.id } }, false, { user: true, medicalAppointments: true }, false);
+            if (patientExists) {
+                patient = patientExists;
+            }
+            else {
+                patient = await entities_factory_1.patientService.createPatient(patientToCreate);
+            }
         }
         catch (err) {
             throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.CREATE_PATIENT_ERROR, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR);
