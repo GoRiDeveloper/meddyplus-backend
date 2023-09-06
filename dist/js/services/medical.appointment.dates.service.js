@@ -1,16 +1,13 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MedicalAppointmentDatesService = void 0;
-const dayjs_1 = __importDefault(require("dayjs"));
 const errorMsgs_1 = require("../constants/errorMsgs");
 const httpCodes_1 = require("../constants/httpCodes");
 const app_error_1 = require("../utils/app.error");
 const unify_dates_1 = require("../utils/unify.dates");
 const entity_factory_1 = require("./factory/entity.factory");
 const _1 = require("./");
+const datejs_1 = require("../utils/datejs");
 class MedicalAppointmentDatesService {
     entityFactory;
     constructor(medicalAppointmentDatesRepository) {
@@ -30,7 +27,7 @@ class MedicalAppointmentDatesService {
         }
         const createDates = unifiedDates.map(async (date) => {
             const idToCompared = doctorExists?.id || doctorCreated?.id;
-            const dateInSeconds = (0, dayjs_1.default)(date).unix().toString();
+            const dateInSeconds = (0, datejs_1.dateToSecondsToString)(date);
             // Función para crear una nueva cita
             const createNewDate = async () => {
                 const createDate = { date: dateInSeconds };
@@ -48,7 +45,14 @@ class MedicalAppointmentDatesService {
             }
             return dateFromDB;
         });
-        return await Promise.all(createDates);
+        const datesCreated = await Promise.all(createDates);
+        const convertDates = datesCreated.map((medicalAppoinmentDate) => {
+            return {
+                ...medicalAppoinmentDate,
+                date: (0, datejs_1.secondsToDate)(medicalAppoinmentDate.date)
+            };
+        });
+        return convertDates;
     }
     async findMedicalAppointmentDate(filters, attributes, relationAttributes, error) {
         return (await this.entityFactory.findOne(filters, attributes, relationAttributes, error));

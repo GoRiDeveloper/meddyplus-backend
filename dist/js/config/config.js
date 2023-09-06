@@ -29,10 +29,12 @@ exports.dbConfig = Object.freeze({
     database: ENV.DB_NAME,
     logging: false,
     synchronize: true,
-    ssl: {
-        ca: ENV.SSL_CERT,
-        rejectUnauthorized: false
-    },
+    // ...(mode === modes.prod && {
+    //   ssl: {
+    //     ca: ENV.SSL_CERT,
+    //     rejectUnauthorized: false
+    //   }
+    // }),
     entities: [
         entities_1.User,
         entities_1.Patient,
