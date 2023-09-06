@@ -10,13 +10,13 @@ const getPatient = async (req, res, next) => {
     try {
         // obtener el id del paciente
         const { sessionUser } = req;
-        const patient = await services_1.patientService.findPatient({ id: sessionUser?.id }, false, {
+        const patient = await services_1.patientService.findPatient({ user: { id: sessionUser?.id } }, false, {
             medicalAppointments: {
                 medicalAppointmentDate: {
                     doctor: { user: true }
                 }
             }
-        }, false);
+        }, true);
         return res.status(httpCodes_1.HTTPCODES.OK).json({
             status: msgs_1.MESSAGES.SUCCESS,
             patient
