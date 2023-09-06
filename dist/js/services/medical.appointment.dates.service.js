@@ -9,46 +9,52 @@ const errorMsgs_1 = require("../constants/errorMsgs");
 const httpCodes_1 = require("../constants/httpCodes");
 const app_error_1 = require("../utils/app.error");
 const unify_dates_1 = require("../utils/unify.dates");
-const entity_service_1 = require("./entity.service");
-const entities_factory_1 = require("./factory/entities.factory");
+const entity_factory_1 = require("./factory/entity.factory");
+const _1 = require("./");
 class MedicalAppointmentDatesService {
-    entityService;
+    entityFactory;
     constructor(medicalAppointmentDatesRepository) {
-        this.entityService = new entity_service_1.EntityService(medicalAppointmentDatesRepository);
+        this.entityFactory = new entity_factory_1.EntityFactory(medicalAppointmentDatesRepository);
     }
     async createMedicalAppointmentDates(sessionUser, date, hours) {
         const unifiedDates = (0, unify_dates_1.unifyDates)(date, hours);
         let doctorCreated;
-        const doctorExists = await entities_factory_1.doctorService.findDoctor({ user: { id: sessionUser.id } }, false, false, false);
+        const doctorExists = await _1.doctorService.findDoctor({ user: { id: sessionUser.id } }, false, false, false);
         if (!doctorExists) {
             const doctorToCreate = {
                 user: sessionUser
             };
-            doctorCreated = await entities_factory_1.doctorService.createDoctor(doctorToCreate);
+            doctorCreated = await _1.doctorService.createDoctor(doctorToCreate);
             if (!doctorCreated)
                 throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.CREATE_DOCTOR_SERVICE_FAIL, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR);
         }
         const createDates = unifiedDates.map(async (date) => {
+            const idToCompared = doctorExists?.id || doctorCreated?.id;
             const dateInSeconds = (0, dayjs_1.default)(date).unix().toString();
-            // Buscaamos la fecha recibida convertida a sec en la BD
-            const dateFromDB = await this.findMedicalAppointmentDate({ date: dateInSeconds }, false, false, false);
-            if (!dateFromDB || dateFromDB.date !== dateInSeconds) {
+            // Función para crear una nueva cita
+            const createNewDate = async () => {
                 const createDate = { date: dateInSeconds };
                 createDate.doctor = doctorExists || doctorCreated;
-                const dateCreated = await this.entityService.create(createDate);
-                return dateCreated;
+                return await this.entityFactory.create(createDate);
+            };
+            // Busca la fecha en la BD para el doctor actual
+            const dateFromDB = await this.findMedicalAppointmentDate({ date: dateInSeconds, doctor: { id: idToCompared } }, false, { doctor: true }, false);
+            if (!dateFromDB) {
+                return await createNewDate();
             }
-            if (dateFromDB) {
-                return dateFromDB;
+            else if (dateFromDB.date === dateInSeconds &&
+                dateFromDB.doctor.id !== idToCompared) {
+                return await createNewDate();
             }
+            return dateFromDB;
         });
-        return (await Promise.all(createDates));
+        return await Promise.all(createDates);
     }
     async findMedicalAppointmentDate(filters, attributes, relationAttributes, error) {
-        return (await this.entityService.findOne(filters, attributes, relationAttributes, error));
+        return (await this.entityFactory.findOne(filters, attributes, relationAttributes, error));
     }
     async updateMedicalAppointmentDate(medicalAppoinmentDate) {
-        return await this.entityService.updateOne(medicalAppoinmentDate);
+        return await this.entityFactory.updateOne(medicalAppoinmentDate);
     }
 }
 exports.MedicalAppointmentDatesService = MedicalAppointmentDatesService;

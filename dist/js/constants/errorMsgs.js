@@ -50,4 +50,6 @@ var ERROR_MSGS;
     ERROR_MSGS["MEDICAL_APPOINTMENT_DATES_HOURS_EMPTY_ARRAY"] = "Debe haber al menos un horario disponible.";
     ERROR_MSGS["MEDICAL_APPOINTMENT_DATES_HOURS_REPEATED"] = "Alg\u00FAn horario esta repetido.";
     ERROR_MSGS["MEDICAL_APPOINTMENT_DATES_HOURS_INVALID_FORMAT"] = "La hora tiene un formato incorrecto";
+    ERROR_MSGS["MEDICAL_APPOINTMENT_DATE_NOT_EXISTS_OR_CANCELLED_OR_COMPLETED"] = "La fecha que elegiste ya fue seleccionada, no existe o se ha concluido la cita m\u00E9dica.";
+    ERROR_MSGS["PATIENT_NOT_FOUND"] = "El paciente no pudo encontrarse.";
 })(ERROR_MSGS || (exports.ERROR_MSGS = ERROR_MSGS = {}));

@@ -5,50 +5,55 @@ const errorMsgs_1 = require("../constants/errorMsgs");
 const httpCodes_1 = require("../constants/httpCodes");
 const medical_appointment_dates_types_1 = require("../types/medical.appointment.dates.types");
 const app_error_1 = require("../utils/app.error");
-const entity_service_1 = require("./entity.service");
-const entities_factory_1 = require("./factory/entities.factory");
+const entity_factory_1 = require("./factory/entity.factory");
+const _1 = require("./");
 class MedicalAppointmentService {
-    entityService;
+    entityFactory;
     constructor(medicalAppointmentRepository) {
-        this.entityService = new entity_service_1.EntityService(medicalAppointmentRepository);
+        this.entityFactory = new entity_factory_1.EntityFactory(medicalAppointmentRepository);
     }
     async createMedicalAppointment(sessionUser, medicalAppoinmentDateId, description) {
-        //buscar la fecha de la cita y cambiar/actualizar su estado a selected
-        const medicalAppointmentDate = await entities_factory_1.medicalAppointmentDatesService.findMedicalAppointmentDate({ id: medicalAppoinmentDateId }, false, { doctor: true }, true);
+        // buscar la fecha de la cita y cambiar/actualizar su estado a selected
+        const medicalAppointmentDate = await _1.medicalAppointmentDatesService.findMedicalAppointmentDate({
+            id: medicalAppoinmentDateId,
+            status: medical_appointment_dates_types_1.MedicalAppointmentDatesStatus.pending
+        }, false, { doctor: true }, false);
+        if (!medicalAppointmentDate)
+            throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.MEDICAL_APPOINTMENT_DATE_NOT_EXISTS_OR_CANCELLED_OR_COMPLETED, httpCodes_1.HTTPCODES.NOT_FOUND);
         medicalAppointmentDate.status = medical_appointment_dates_types_1.MedicalAppointmentDatesStatus.selected;
         try {
-            await entities_factory_1.medicalAppointmentDatesService.updateMedicalAppointmentDate(medicalAppointmentDate);
+            await _1.medicalAppointmentDatesService.updateMedicalAppointmentDate(medicalAppointmentDate);
         }
         catch (err) {
             throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.MEDICAL_APPOINTMENT_FAIL_UPDATE, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR);
         }
-        //crear un objeto para la tabla de patients, y asignarle el sessionUser en la clave user de ese objeto
+        // crear un objeto para la tabla de patients, y asignarle el sessionUser en la clave user de ese objeto
         const patientToCreate = {
             user: sessionUser
         };
-        //crear el paciente en la tabla de patients
+        // crear el paciente en la tabla de patients
         let patient;
         try {
-            const patientExists = await entities_factory_1.patientService.findPatient({ user: { id: sessionUser.id } }, false, { user: true, medicalAppointments: true }, false);
+            const patientExists = await _1.patientService.findPatient({ user: { id: sessionUser.id } }, false, { user: true, medicalAppointments: true }, false);
             if (patientExists) {
                 patient = patientExists;
             }
             else {
-                patient = await entities_factory_1.patientService.createPatient(patientToCreate);
+                patient = await _1.patientService.createPatient(patientToCreate);
             }
         }
         catch (err) {
             throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.CREATE_PATIENT_ERROR, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR);
         }
-        //crear un objeto para la tabla de medicalAppointment, asignarle en la clave medicalAppointmentDate la fecha que buscamos y actualizamos su estado
-        //en el objeto para la tabla medicalAppointment asignarle en la clave patient, el paciente que creamos
+        // crear un objeto para la tabla de medicalAppointment, asignarle en la clave medicalAppointmentDate la fecha que buscamos y actualizamos su estado
+        // en el objeto para la tabla medicalAppointment asignarle en la clave patient, el paciente que creamos
         const medicalAppoinment = {
             description,
             medicalAppointmentDate,
             patient
         };
-        //devolver la cita creada
-        return (await this.entityService.create(medicalAppoinment));
+        // devolver la cita creada
+        return (await this.entityFactory.create(medicalAppoinment));
     }
 }
 exports.MedicalAppointmentService = MedicalAppointmentService;

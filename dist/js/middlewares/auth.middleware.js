@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.restrictTo = exports.protect = void 0;
 const errorMsgs_1 = require("../constants/errorMsgs");
 const httpCodes_1 = require("../constants/httpCodes");
-const entities_factory_1 = require("../services/factory/entities.factory");
+const services_1 = require("../services");
 const app_error_1 = require("../utils/app.error");
 const jwt_1 = require("../utils/jwt");
 const protect = async (req, _res, next) => {
@@ -31,7 +31,7 @@ const protect = async (req, _res, next) => {
     //   password: false,
     //   status: false
     // }
-    const userExists = await entities_factory_1.userService.findUser({ id: decoded.id }, false, false, false);
+    const userExists = await services_1.userService.findUser({ id: decoded.id }, false, false, false);
     if (!userExists) {
         next(new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.TOKEN_USER_NOT_FOUND, httpCodes_1.HTTPCODES.NOT_FOUND));
         return;

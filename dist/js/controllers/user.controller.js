@@ -4,11 +4,11 @@ exports.deleteUser = exports.updatePassword = exports.singIn = exports.signUp = 
 const errorMsgs_1 = require("../constants/errorMsgs");
 const httpCodes_1 = require("../constants/httpCodes");
 const msgs_1 = require("../constants/msgs");
-const entities_factory_1 = require("../services/factory/entities.factory");
+const services_1 = require("../services");
 const app_error_1 = require("../utils/app.error");
 const signUp = async (req, res, next) => {
     try {
-        const user = await entities_factory_1.userService.createUser(req.safeData?.body);
+        const user = await services_1.userService.createUser(req.safeData?.body);
         return res.status(httpCodes_1.HTTPCODES.CREATED).json({
             status: msgs_1.MESSAGES.SUCCESS,
             user
@@ -25,7 +25,7 @@ const signUp = async (req, res, next) => {
 exports.signUp = signUp;
 const singIn = async (req, res, next) => {
     try {
-        const { token, user } = await entities_factory_1.userService.signIn(req.safeData?.body);
+        const { token, user } = await services_1.userService.signIn(req.safeData?.body);
         return res.status(httpCodes_1.HTTPCODES.OK).json({
             status: msgs_1.MESSAGES.SUCCESS,
             token,
@@ -44,7 +44,7 @@ exports.singIn = singIn;
 const updatePassword = async (req, res, next) => {
     try {
         const { user, safeData } = req;
-        await entities_factory_1.userService.updateUserPass(user, safeData?.body);
+        await services_1.userService.updateUserPass(user, safeData?.body);
         return res.status(httpCodes_1.HTTPCODES.NO_CONTENT).json({
             status: msgs_1.MESSAGES.SUCCESS
         });
@@ -92,7 +92,7 @@ exports.updatePassword = updatePassword;
 // }
 const deleteUser = async (req, res, next) => {
     try {
-        await entities_factory_1.userService.disableUser(req.safeData?.params);
+        await services_1.userService.disableUser(req.safeData?.params);
         return res.status(httpCodes_1.HTTPCODES.NO_CONTENT).json({
             status: msgs_1.MESSAGES.SUCCESS
         });

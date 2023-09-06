@@ -4,12 +4,12 @@ exports.getAllDoctorsAndAdmins = exports.cancelDoctorsAndAdminsRegistration = ex
 const errorMsgs_1 = require("../constants/errorMsgs");
 const httpCodes_1 = require("../constants/httpCodes");
 const msgs_1 = require("../constants/msgs");
-const entities_factory_1 = require("../services/factory/entities.factory");
+const services_1 = require("../services");
 const app_error_1 = require("../utils/app.error");
 const approveDoctorsAndAdminsRegistration = async (req, res, next) => {
     try {
         const { id } = req.safeData?.params;
-        const updatedUser = await entities_factory_1.userService.approveAdminDocsRegistration(id);
+        const updatedUser = await services_1.userService.approveAdminDocsRegistration(id);
         return res.status(httpCodes_1.HTTPCODES.OK).json({
             status: msgs_1.MESSAGES.SUCCESS,
             message: msgs_1.MESSAGES.ADMIN_REGISTRATION_APPROVAL_OK,
@@ -28,7 +28,7 @@ exports.approveDoctorsAndAdminsRegistration = approveDoctorsAndAdminsRegistratio
 const cancelDoctorsAndAdminsRegistration = async (req, res, next) => {
     try {
         const { id } = req.safeData?.params;
-        await entities_factory_1.userService.cancelAdminDocsRegistration(id);
+        await services_1.userService.cancelAdminDocsRegistration(id);
         return res.status(httpCodes_1.HTTPCODES.NO_CONTENT).json({
             status: msgs_1.MESSAGES.SUCCESS
         });
@@ -45,7 +45,7 @@ exports.cancelDoctorsAndAdminsRegistration = cancelDoctorsAndAdminsRegistration;
 const getAllDoctorsAndAdmins = async (req, res, next) => {
     try {
         const requesterId = req.sessionUser?.id;
-        const [users, count] = await entities_factory_1.userService.findAllDoctorsAndAdmins(requesterId);
+        const [users, count] = await services_1.userService.findAllDoctorsAndAdmins(requesterId);
         return res.status(httpCodes_1.HTTPCODES.OK).json({
             status: msgs_1.MESSAGES.SUCCESS,
             users,

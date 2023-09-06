@@ -10,19 +10,19 @@ const app_error_1 = require("../utils/app.error");
 const bcrypt_1 = require("../utils/bcrypt");
 const check_role_for_assignment_1 = require("../utils/check.role.for.assignment");
 const jwt_1 = require("../utils/jwt");
-const entity_service_1 = require("./entity.service");
+const entity_factory_1 = require("./factory/entity.factory");
 class UserService {
-    userRepository;
-    entityService;
+    //private readonly userRepository: UserRepository
+    entityFactory;
     constructor(userRepository) {
-        this.userRepository = userRepository;
-        this.entityService = new entity_service_1.EntityService(userRepository);
+        //this.userRepository = userRepository
+        this.entityFactory = new entity_factory_1.EntityFactory(userRepository);
     }
     async findUser(filters, attributes, relationAttributes, error) {
-        return await this.entityService.findOne(filters, attributes, relationAttributes, error);
+        return await this.entityFactory.findOne(filters, attributes, relationAttributes, error);
     }
     async findAllUsers(filters, attributes, relationAttributes) {
-        return await this.entityService.findAll(filters, attributes, relationAttributes);
+        return await this.entityFactory.findAll(filters, attributes, relationAttributes);
     }
     async findAllDoctorsAndAdmins(sessionId) {
         const filters = [
@@ -57,12 +57,12 @@ class UserService {
             role: true,
             id: true
         };
-        const userToBeUpdated = await this.entityService.findOne(filters, attributes, false, false);
+        const userToBeUpdated = await this.entityFactory.findOne(filters, attributes, false, false);
         if (!userToBeUpdated)
             throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.ADMIN_REGISTRATION_APPROVAL_FAIL, httpCodes_1.HTTPCODES.BAD_REQUEST);
         userToBeUpdated.status = user_types_1.UserStatus.enable;
         try {
-            return await this.entityService.updateOne(userToBeUpdated);
+            return await this.entityFactory.updateOne(userToBeUpdated);
         }
         catch (error) {
             throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.ADMIN_REGISTRATION_APPROVAL_ERROR, httpCodes_1.HTTPCODES.BAD_REQUEST);
@@ -81,7 +81,7 @@ class UserService {
             role: true,
             id: true
         };
-        const userToBeCanceled = await this.entityService.findOne(filters, attributes, false, false);
+        const userToBeCanceled = await this.entityFactory.findOne(filters, attributes, false, false);
         if (!userToBeCanceled) {
             throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.ADMIN_REGISTRATION_CANCELATION_FAIL, httpCodes_1.HTTPCODES.NOT_FOUND);
         }
@@ -90,7 +90,7 @@ class UserService {
     async createUser(user) {
         const assignedUser = (0, check_role_for_assignment_1.checkRoleForAssignment)(user);
         assignedUser.password = await (0, bcrypt_1.hashPassword)(user.password);
-        const userCreated = (await this.entityService.create(assignedUser));
+        const userCreated = (await this.entityFactory.create(assignedUser));
         return (0, user_dto_1.userDto)(userCreated);
     }
     async signIn(loginData) {
@@ -122,7 +122,7 @@ class UserService {
             passwordChangedAt: new Date()
         };
         try {
-            await this.entityService.updateOne(data);
+            await this.entityFactory.updateOne(data);
         }
         catch (e) {
             throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.PASSWORD_CHANGE_ERROR, httpCodes_1.HTTPCODES.BAD_REQUEST);
@@ -130,7 +130,7 @@ class UserService {
     }
     async disableUser(id) {
         try {
-            await this.entityService.updateOne({ id, status: user_types_1.UserStatus.disable });
+            await this.entityFactory.updateOne({ id, status: user_types_1.UserStatus.disable });
         }
         catch (e) {
             throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.USER_DISABLE_ERROR, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR);

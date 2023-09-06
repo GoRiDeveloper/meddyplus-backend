@@ -7,7 +7,7 @@ exports.loginSchema = void 0;
 const validator_1 = __importDefault(require("validator"));
 const zod_1 = __importDefault(require("zod"));
 const msgs_1 = require("../constants/msgs");
-const entities_factory_1 = require("../services/factory/entities.factory");
+const services_1 = require("../services");
 const user_types_1 = require("../types/user.types");
 exports.loginSchema = zod_1.default.object({
     body: zod_1.default.object({
@@ -21,7 +21,7 @@ exports.loginSchema = zod_1.default.object({
             .toLowerCase()
             .superRefine(async (email, ctx) => {
             const filters = { email, status: user_types_1.UserStatus.enable };
-            const userExists = await entities_factory_1.userService.findUser(filters, false, false, false);
+            const userExists = await services_1.userService.findUser(filters, false, false, false);
             if (!userExists) {
                 ctx.addIssue({
                     code: zod_1.default.ZodIssueCode.custom,

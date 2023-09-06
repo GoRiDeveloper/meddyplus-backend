@@ -8,13 +8,13 @@ const dayjs_1 = __importDefault(require("dayjs"));
 const errorMsgs_1 = require("../constants/errorMsgs");
 const httpCodes_1 = require("../constants/httpCodes");
 const msgs_1 = require("../constants/msgs");
-const entities_factory_1 = require("../services/factory/entities.factory");
+const services_1 = require("../services");
 const app_error_1 = require("../utils/app.error");
 const createDates = async (req, res, next) => {
     try {
         const { sessionUser } = req;
         const { date, hours } = req.safeData?.body;
-        const medicalAppointmentDates = await entities_factory_1.medicalAppointmentDatesService.createMedicalAppointmentDates(sessionUser, date, hours);
+        const medicalAppointmentDates = await services_1.medicalAppointmentDatesService.createMedicalAppointmentDates(sessionUser, date, hours);
         const datesToFrontEnd = medicalAppointmentDates.map((ele) => {
             return {
                 ...ele,
@@ -28,6 +28,7 @@ const createDates = async (req, res, next) => {
         });
     }
     catch (err) {
+        console.log('error del controlador', err);
         if (!(err instanceof app_error_1.AppError)) {
             next(new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.MEDICAL_APPOINTMENT_DATE_CREATE_FAIL, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR));
             return;
