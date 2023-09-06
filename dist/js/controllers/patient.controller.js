@@ -16,7 +16,7 @@ const getPatient = async (req, res, next) => {
                     doctor: { user: true }
                 }
             }
-        }, false);
+        }, true);
         return res.status(httpCodes_1.HTTPCODES.OK).json({
             status: msgs_1.MESSAGES.SUCCESS,
             patient
