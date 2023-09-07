@@ -56,4 +56,5 @@ var ERROR_MSGS;
     ERROR_MSGS["DOCTORS_NOT_FOUND"] = "No hay doctores cons disponibilidad horaria.";
     ERROR_MSGS["DOCTORS_INTERNAL_NOT_FOUND"] = "No se pudieron encontrar los doctores debido a un error interno.";
     ERROR_MSGS["GET_ALL_DATES_BY_SINGLE_DOCTOR_FAIL"] = "Error al buscar todas las fechas creadas de un doctor";
+    ERROR_MSGS["GET_HOURS_FROM_SPECIFIC_DOCTOR_DATE_FAIL"] = "Error al buscar las horas previamente elegidas por un doctor a partir de una fecha espec\u00EDfica.";
 })(ERROR_MSGS || (exports.ERROR_MSGS = ERROR_MSGS = {}));

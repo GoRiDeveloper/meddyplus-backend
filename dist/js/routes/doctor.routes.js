@@ -12,4 +12,5 @@ exports.doctorRouter = (0, express_1.Router)();
 exports.doctorRouter.use(auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)(user_types_1.UserRole.doctor));
 exports.doctorRouter.post('/assign-available-dates', (0, schema_middleware_1.schemaValidator)(medical_appointments_dates_schema_1.medicalAppointmentsDatesSchema), medical_appointment_dates_controller_1.createDates);
 exports.doctorRouter.put('/toggle-medical-appointment-date-status/:id', (0, schema_middleware_1.schemaValidator)(id_schema_1.idSchema), medical_appointment_dates_controller_1.toggleStatusMedicalAppointmentDate);
-exports.doctorRouter.get('/get-all-dates-by-doctor', medical_appointment_dates_controller_1.getAllDateByDoctor);
+exports.doctorRouter.get('/get-all-dates-by-doctor', medical_appointment_dates_controller_1.getAllDatesByDoctor);
+exports.doctorRouter.post('/get-all-hours-from-date-doctor', medical_appointment_dates_controller_1.getAllHoursByDoctorDate);

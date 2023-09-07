@@ -33,6 +33,7 @@ __decorate([
 ], MedicalAppointment.prototype, "medicalAppointmentDate", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)((_type) => _1.Patient, (patient) => patient.medicalAppointments),
+    (0, typeorm_1.JoinColumn)({ name: "patient_id" }),
     __metadata("design:type", _1.Patient)
 ], MedicalAppointment.prototype, "patient", void 0);
 exports.MedicalAppointment = MedicalAppointment = __decorate([

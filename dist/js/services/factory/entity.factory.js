@@ -26,10 +26,10 @@ class EntityFactory {
             throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.RESOURCE_NOT_FOUND, httpCodes_1.HTTPCODES.NOT_FOUND);
         return entity;
     }
-    async create(data) {
+    async create(data, listeners) {
         const created = this.entityRepository.create(data);
         try {
-            return await this.entityRepository.save(created, { listeners: false });
+            return await this.entityRepository.save(created, { listeners });
         }
         catch (e) {
             console.log(e);

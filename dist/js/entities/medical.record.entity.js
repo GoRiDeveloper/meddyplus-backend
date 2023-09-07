@@ -32,6 +32,7 @@ __decorate([
 ], MedicalRecord.prototype, "description", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)((_type) => _1.Patient, (patient) => patient.medicalRecords),
+    (0, typeorm_1.JoinColumn)({ name: 'patient_id' }),
     __metadata("design:type", _1.Patient)
 ], MedicalRecord.prototype, "patient", void 0);
 exports.MedicalRecord = MedicalRecord = __decorate([

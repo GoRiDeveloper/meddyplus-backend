@@ -13,9 +13,13 @@ exports.MedicalAppointmentDates = void 0;
 const typeorm_1 = require("typeorm");
 const medical_appointment_dates_types_1 = require("../types/medical.appointment.dates.types");
 const doctor_entity_1 = require("./doctor.entity");
+const datejs_1 = require("../utils/datejs");
 let MedicalAppointmentDates = exports.MedicalAppointmentDates = class MedicalAppointmentDates extends typeorm_1.BaseEntity {
     id;
     date;
+    convertDate() {
+        this.date = (0, datejs_1.secondsToDate)(this.date);
+    }
     status;
     doctor;
 };
@@ -27,6 +31,13 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'varchar' }),
     __metadata("design:type", String)
 ], MedicalAppointmentDates.prototype, "date", void 0);
+__decorate([
+    (0, typeorm_1.AfterLoad)(),
+    (0, typeorm_1.AfterInsert)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], MedicalAppointmentDates.prototype, "convertDate", null);
 __decorate([
     (0, typeorm_1.Column)({
         type: 'enum',

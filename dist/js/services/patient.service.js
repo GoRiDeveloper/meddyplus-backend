@@ -13,7 +13,7 @@ class PatientService {
         return (await this.entityFactory.findOne(filters, attributes, relationAttributes, error));
     }
     async createPatient(patient) {
-        return (await this.entityFactory.create(patient));
+        return (await this.entityFactory.create(patient, false));
     }
 }
 exports.PatientService = PatientService;

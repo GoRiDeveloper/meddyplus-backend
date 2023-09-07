@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllDateByDoctor = exports.toggleStatusMedicalAppointmentDate = exports.createDates = void 0;
+exports.getAllHoursByDoctorDate = exports.getAllDatesByDoctor = exports.toggleStatusMedicalAppointmentDate = exports.createDates = void 0;
 const errorMsgs_1 = require("../constants/errorMsgs");
 const httpCodes_1 = require("../constants/httpCodes");
 const msgs_1 = require("../constants/msgs");
@@ -43,7 +43,7 @@ const toggleStatusMedicalAppointmentDate = async (req, res, next) => {
     }
 };
 exports.toggleStatusMedicalAppointmentDate = toggleStatusMedicalAppointmentDate;
-const getAllDateByDoctor = async (req, res, next) => {
+const getAllDatesByDoctor = async (req, res, next) => {
     try {
         const { id } = req.sessionUser;
         const [dates, count] = await services_1.medicalAppointmentDatesService.getAllMedicalAppoitmentDates(id);
@@ -61,4 +61,39 @@ const getAllDateByDoctor = async (req, res, next) => {
         next(err);
     }
 };
-exports.getAllDateByDoctor = getAllDateByDoctor;
+exports.getAllDatesByDoctor = getAllDatesByDoctor;
+const getAllHoursByDoctorDate = async (req, res, next) => {
+    try {
+        const { id } = req.sessionUser;
+        const { date } = req.body;
+        const response = await services_1.medicalAppointmentDatesService.getAllMedicalAppoitmentDatesPendingAndSelected(id);
+        const dates = response[0];
+        if (Array.isArray(dates)) {
+            const matchingHours = dates.filter((item) => {
+                const itemDate = item.date.split(' ')[0];
+                return itemDate === date;
+            });
+            const hours = matchingHours.map((item) => {
+                const parts = item.date.split(' ');
+                const hour = parts[1];
+                const obj = {
+                    hour,
+                    status: item.status ?? ''
+                };
+                return obj;
+            });
+            res.status(httpCodes_1.HTTPCODES.OK).json({
+                status: msgs_1.MESSAGES.SUCCESS,
+                hours
+            });
+        }
+    }
+    catch (err) {
+        if (!(err instanceof app_error_1.AppError)) {
+            next(new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.GET_HOURS_FROM_SPECIFIC_DOCTOR_DATE_FAIL, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR));
+            return;
+        }
+        next(err);
+    }
+};
+exports.getAllHoursByDoctorDate = getAllHoursByDoctorDate;

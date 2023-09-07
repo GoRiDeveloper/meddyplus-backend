@@ -88,7 +88,7 @@ class UserService {
     async createUser(user) {
         const assignedUser = (0, check_role_for_assignment_1.checkRoleForAssignment)(user);
         assignedUser.password = await (0, bcrypt_1.hashPassword)(user.password);
-        const userCreated = (await this.entityFactory.create(assignedUser));
+        const userCreated = (await this.entityFactory.create(assignedUser, false));
         return (0, user_dto_1.userDto)(userCreated);
     }
     async signIn(loginData) {

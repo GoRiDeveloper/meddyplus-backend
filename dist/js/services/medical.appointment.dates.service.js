@@ -34,7 +34,7 @@ class MedicalAppointmentDatesService {
             const createNewDate = async () => {
                 const createDate = { date: dateInSeconds };
                 createDate.doctor = doctorExists || doctorCreated;
-                return await this.entityFactory.create(createDate);
+                return await this.entityFactory.create(createDate, true);
             };
             // Busca la fecha en la BD para el doctor actual
             const dateFromDB = await this.findMedicalAppointmentDate({ date: dateInSeconds, doctor: { id: idToCompared } }, false, { doctor: true }, false);
@@ -47,14 +47,7 @@ class MedicalAppointmentDatesService {
             }
             return dateFromDB;
         });
-        const datesCreated = await Promise.all(createDates);
-        const convertDates = datesCreated.map((medicalAppoinmentDate) => {
-            return {
-                ...medicalAppoinmentDate,
-                date: (0, datejs_1.secondsToDate)(medicalAppoinmentDate.date)
-            };
-        });
-        return convertDates;
+        return await Promise.all(createDates);
     }
     async findMedicalAppointmentDate(filters, attributes, relationAttributes, error) {
         return (await this.entityFactory.findOne(filters, attributes, relationAttributes, error));
@@ -98,14 +91,20 @@ class MedicalAppointmentDatesService {
             ])
         };
         const relationAttributes = { doctor: true };
-        const [dates, count] = await this.findMedicalAppointmentDates(filters, false, relationAttributes);
-        const convertedDates = dates.map((medicalAppoinmentDate) => {
-            return {
-                ...medicalAppoinmentDate,
-                date: (0, datejs_1.secondsToDate)(medicalAppoinmentDate.date)
-            };
-        });
-        return [convertedDates, count];
+        return await this.findMedicalAppointmentDates(filters, false, relationAttributes);
+    }
+    // Solo trae las fechas selected y pending
+    async getAllMedicalAppoitmentDatesPendingAndSelected(id) {
+        const doctorExists = await _1.doctorService.findDoctor({ user: { id } }, false, false, false);
+        const filters = {
+            doctor: { id: doctorExists.id },
+            status: (0, typeorm_1.In)([
+                medical_appointment_dates_types_1.MedicalAppointmentDatesStatus.pending,
+                medical_appointment_dates_types_1.MedicalAppointmentDatesStatus.selected
+            ])
+        };
+        const relationAttributes = { doctor: true };
+        return await this.findMedicalAppointmentDates(filters, false, relationAttributes);
     }
 }
 exports.MedicalAppointmentDatesService = MedicalAppointmentDatesService;
