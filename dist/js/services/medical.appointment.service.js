@@ -5,8 +5,8 @@ const errorMsgs_1 = require("../constants/errorMsgs");
 const httpCodes_1 = require("../constants/httpCodes");
 const medical_appointment_dates_types_1 = require("../types/medical.appointment.dates.types");
 const app_error_1 = require("../utils/app.error");
-const entity_factory_1 = require("./factory/entity.factory");
 const _1 = require("./");
+const entity_factory_1 = require("./factory/entity.factory");
 class MedicalAppointmentService {
     entityFactory;
     constructor(medicalAppointmentRepository) {

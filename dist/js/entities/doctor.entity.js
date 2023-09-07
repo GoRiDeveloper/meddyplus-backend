@@ -30,7 +30,7 @@ __decorate([
     __metadata("design:type", user_entity_1.User)
 ], Doctor.prototype, "user", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)((_type) => medical_appointmet_dates_entity_1.MedicalAppointmentDates, (medicalAppointmentsDates) => medicalAppointmentsDates),
+    (0, typeorm_1.OneToMany)((_type) => medical_appointmet_dates_entity_1.MedicalAppointmentDates, (medicalAppointmentsDates) => medicalAppointmentsDates.doctor),
     __metadata("design:type", Array)
 ], Doctor.prototype, "medicalAppointmentDates", void 0);
 __decorate([

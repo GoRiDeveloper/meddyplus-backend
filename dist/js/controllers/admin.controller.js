@@ -9,11 +9,9 @@ const app_error_1 = require("../utils/app.error");
 const approveDoctorsAndAdminsRegistration = async (req, res, next) => {
     try {
         const { id } = req.safeData?.params;
-        const updatedUser = await services_1.userService.approveAdminDocsRegistration(id);
-        return res.status(httpCodes_1.HTTPCODES.OK).json({
-            status: msgs_1.MESSAGES.SUCCESS,
-            message: msgs_1.MESSAGES.ADMIN_REGISTRATION_APPROVAL_OK,
-            updatedUser
+        await services_1.userService.approveAdminDocsRegistration(id);
+        return res.status(httpCodes_1.HTTPCODES.NO_CONTENT).json({
+            status: msgs_1.MESSAGES.SUCCESS
         });
     }
     catch (err) {

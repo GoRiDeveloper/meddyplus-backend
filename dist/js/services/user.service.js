@@ -12,10 +12,8 @@ const check_role_for_assignment_1 = require("../utils/check.role.for.assignment"
 const jwt_1 = require("../utils/jwt");
 const entity_factory_1 = require("./factory/entity.factory");
 class UserService {
-    //private readonly userRepository: UserRepository
     entityFactory;
     constructor(userRepository) {
-        //this.userRepository = userRepository
         this.entityFactory = new entity_factory_1.EntityFactory(userRepository);
     }
     async findUser(filters, attributes, relationAttributes, error) {

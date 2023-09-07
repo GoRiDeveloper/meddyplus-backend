@@ -52,6 +52,8 @@ var ERROR_MSGS;
     ERROR_MSGS["MEDICAL_APPOINTMENT_DATES_HOURS_INVALID_FORMAT"] = "La hora tiene un formato incorrecto";
     ERROR_MSGS["MEDICAL_APPOINTMENT_DATE_NOT_EXISTS_OR_CANCELLED_OR_COMPLETED"] = "La fecha que elegiste ya fue seleccionada, no existe o se ha concluido la cita m\u00E9dica.";
     ERROR_MSGS["PATIENT_NOT_FOUND"] = "El paciente no pudo encontrarse.";
+    ERROR_MSGS["MEDICAL_APPOINTMENT_DATE_CANCELLED_FAIL"] = "Error al cancelar la fecha";
     ERROR_MSGS["DOCTORS_NOT_FOUND"] = "No hay doctores cons disponibilidad horaria.";
     ERROR_MSGS["DOCTORS_INTERNAL_NOT_FOUND"] = "No se pudieron encontrar los doctores debido a un error interno.";
+    ERROR_MSGS["GET_ALL_DATES_BY_SINGLE_DOCTOR_FAIL"] = "Error al buscar todas las fechas creadas de un doctor";
 })(ERROR_MSGS || (exports.ERROR_MSGS = ERROR_MSGS = {}));

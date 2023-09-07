@@ -2,11 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.doctorRouter = void 0;
 const express_1 = require("express");
-const schema_middleware_1 = require("../middlewares/schema.middleware");
-const medical_appointments_dates_schema_1 = require("../schema/medical.appointments.dates.schema");
 const medical_appointment_dates_controller_1 = require("../controllers/medical.appointment.dates.controller");
 const auth_middleware_1 = require("../middlewares/auth.middleware");
+const schema_middleware_1 = require("../middlewares/schema.middleware");
+const id_schema_1 = require("../schema/id.schema");
+const medical_appointments_dates_schema_1 = require("../schema/medical.appointments.dates.schema");
 const user_types_1 = require("../types/user.types");
 exports.doctorRouter = (0, express_1.Router)();
 exports.doctorRouter.use(auth_middleware_1.protect, (0, auth_middleware_1.restrictTo)(user_types_1.UserRole.doctor));
 exports.doctorRouter.post('/assign-available-dates', (0, schema_middleware_1.schemaValidator)(medical_appointments_dates_schema_1.medicalAppointmentsDatesSchema), medical_appointment_dates_controller_1.createDates);
+exports.doctorRouter.put('/toggle-medical-appointment-date-status/:id', (0, schema_middleware_1.schemaValidator)(id_schema_1.idSchema), medical_appointment_dates_controller_1.toggleStatusMedicalAppointmentDate);
+exports.doctorRouter.get('/get-all-dates-by-doctor', medical_appointment_dates_controller_1.getAllDateByDoctor);

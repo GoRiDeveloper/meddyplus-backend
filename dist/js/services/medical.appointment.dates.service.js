@@ -1,13 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MedicalAppointmentDatesService = void 0;
+const typeorm_1 = require("typeorm");
 const errorMsgs_1 = require("../constants/errorMsgs");
 const httpCodes_1 = require("../constants/httpCodes");
+const medical_appointment_dates_types_1 = require("../types/medical.appointment.dates.types");
 const app_error_1 = require("../utils/app.error");
-const unify_dates_1 = require("../utils/unify.dates");
-const entity_factory_1 = require("./factory/entity.factory");
-const _1 = require("./");
 const datejs_1 = require("../utils/datejs");
+const unify_dates_1 = require("../utils/unify.dates");
+const _1 = require("./");
+const entity_factory_1 = require("./factory/entity.factory");
 class MedicalAppointmentDatesService {
     entityFactory;
     constructor(medicalAppointmentDatesRepository) {
@@ -59,6 +61,51 @@ class MedicalAppointmentDatesService {
     }
     async updateMedicalAppointmentDate(medicalAppoinmentDate) {
         return await this.entityFactory.updateOne(medicalAppoinmentDate);
+    }
+    // Cambia el estado de la fecha de una cita médica a:
+    // selected --> cancelled
+    // pending <--> cancelled, y viceversa
+    async toggleStatusMedicalAppointmentDate(id) {
+        const date = await this.findMedicalAppointmentDate({ id }, false, false, true);
+        if (!date) {
+            throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.MEDICAL_APPOINTMENT_DATES_DATE_INVALID_FORMAT, httpCodes_1.HTTPCODES.NOT_FOUND);
+        }
+        switch (date.status) {
+            case medical_appointment_dates_types_1.MedicalAppointmentDatesStatus.selected:
+                date.status = medical_appointment_dates_types_1.MedicalAppointmentDatesStatus.cancelled;
+                break;
+            case medical_appointment_dates_types_1.MedicalAppointmentDatesStatus.cancelled:
+                date.status = medical_appointment_dates_types_1.MedicalAppointmentDatesStatus.pending;
+                break;
+            case medical_appointment_dates_types_1.MedicalAppointmentDatesStatus.pending:
+                date.status = medical_appointment_dates_types_1.MedicalAppointmentDatesStatus.cancelled;
+                break;
+        }
+        await this.updateMedicalAppointmentDate(date);
+    }
+    async findMedicalAppointmentDates(filters, attributes, relationAttributes) {
+        return await this.entityFactory.findAll(filters, attributes, relationAttributes);
+    }
+    // Get para traer todas las fechas que un médico previamente subió al sistema
+    async getAllMedicalAppoitmentDates(id) {
+        const doctorExists = await _1.doctorService.findDoctor({ user: { id } }, false, false, false);
+        const filters = {
+            doctor: { id: doctorExists.id },
+            status: (0, typeorm_1.In)([
+                medical_appointment_dates_types_1.MedicalAppointmentDatesStatus.cancelled,
+                medical_appointment_dates_types_1.MedicalAppointmentDatesStatus.pending,
+                medical_appointment_dates_types_1.MedicalAppointmentDatesStatus.selected
+            ])
+        };
+        const relationAttributes = { doctor: true };
+        const [dates, count] = await this.findMedicalAppointmentDates(filters, false, relationAttributes);
+        const convertedDates = dates.map((medicalAppoinmentDate) => {
+            return {
+                ...medicalAppoinmentDate,
+                date: (0, datejs_1.secondsToDate)(medicalAppoinmentDate.date)
+            };
+        });
+        return [convertedDates, count];
     }
 }
 exports.MedicalAppointmentDatesService = MedicalAppointmentDatesService;
