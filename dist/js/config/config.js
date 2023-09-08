@@ -9,8 +9,7 @@ exports.port = ENV.PORT ?? 4444;
 exports.salt = Number(ENV.SALT);
 exports.ACCEPTED_ORIGIN = [
     'http://localhost:3000',
-    'https://meddyplus.netlify.app',
-    /http:\/\\/192\.168$/
+    'https://meddyplus.netlify.app'
 ];
 exports.ACCEPTED_METHODS = ['GET', 'POST', 'PATCH', 'DELETE'];
 exports.modes = Object.freeze({
