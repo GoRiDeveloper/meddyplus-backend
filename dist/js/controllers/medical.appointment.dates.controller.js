@@ -29,7 +29,7 @@ exports.createDates = createDates;
 const toggleStatusMedicalAppointmentDate = async (req, res, next) => {
     try {
         const { id } = req.params;
-        await services_1.medicalAppointmentDatesService.toggleStatusMedicalAppointmentDate(id);
+        await services_1.medicalAppointmentDatesService.toggleStatusMedicalAppointmentDate(id, req?.sessionUser);
         res.status(httpCodes_1.HTTPCODES.NO_CONTENT).json({
             status: msgs_1.MESSAGES.SUCCESS
         });

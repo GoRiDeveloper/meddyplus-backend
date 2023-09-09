@@ -15,7 +15,9 @@ const _1 = require("./");
 let MedicalRecord = exports.MedicalRecord = class MedicalRecord extends typeorm_1.BaseEntity {
     id;
     date;
-    description;
+    allergies;
+    previousMedicalConditions;
+    familyMedicalHistory;
     patient;
 };
 __decorate([
@@ -27,11 +29,19 @@ __decorate([
     __metadata("design:type", Date)
 ], MedicalRecord.prototype, "date", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'text' }),
+    (0, typeorm_1.Column)({ type: 'varchar' }),
     __metadata("design:type", String)
-], MedicalRecord.prototype, "description", void 0);
+], MedicalRecord.prototype, "allergies", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)((_type) => _1.Patient, (patient) => patient.medicalRecords),
+    (0, typeorm_1.Column)({ type: 'text', name: 'previous_medical_conditions' }),
+    __metadata("design:type", String)
+], MedicalRecord.prototype, "previousMedicalConditions", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'text', name: 'family_medical_history' }),
+    __metadata("design:type", String)
+], MedicalRecord.prototype, "familyMedicalHistory", void 0);
+__decorate([
+    (0, typeorm_1.OneToOne)((_type) => _1.Patient),
     (0, typeorm_1.JoinColumn)({ name: 'patient_id' }),
     __metadata("design:type", _1.Patient)
 ], MedicalRecord.prototype, "patient", void 0);

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPatient = void 0;
+exports.cancelPatientAppointment = exports.getPatient = void 0;
 const httpCodes_1 = require("../constants/httpCodes");
 const services_1 = require("../services");
 const app_error_1 = require("../utils/app.error");
@@ -32,3 +32,19 @@ const getPatient = async (req, res, next) => {
     }
 };
 exports.getPatient = getPatient;
+// Cancelar cita de parte del paciente
+const cancelPatientAppointment = async (req, res, next) => {
+    try {
+        const { id } = req.safeData?.params;
+        await services_1.patientService.cancelPatientAppointment(id);
+        return res.status(httpCodes_1.HTTPCODES.NO_CONTENT).json({
+            status: msgs_1.MESSAGES.SUCCESS
+        });
+    }
+    catch (err) {
+        if (!(err instanceof app_error_1.AppError)) {
+            next(new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.MEDICAL_APPOINTMENT_DATES_INVALID_TYPE, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR));
+        }
+    }
+};
+exports.cancelPatientAppointment = cancelPatientAppointment;

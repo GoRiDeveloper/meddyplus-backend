@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createMedicalAppointment = void 0;
-const app_error_1 = require("../utils/app.error");
-const services_1 = require("../services");
+const errorMsgs_1 = require("../constants/errorMsgs");
 const httpCodes_1 = require("../constants/httpCodes");
 const msgs_1 = require("../constants/msgs");
-const errorMsgs_1 = require("../constants/errorMsgs");
+const services_1 = require("../services");
+const app_error_1 = require("../utils/app.error");
 const createMedicalAppointment = async (req, res, next) => {
     try {
         const { sessionUser, safeData } = req;

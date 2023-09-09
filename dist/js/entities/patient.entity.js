@@ -16,7 +16,6 @@ let Patient = exports.Patient = class Patient extends typeorm_1.BaseEntity {
     id;
     user;
     medicalAppointments;
-    medicalRecords;
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)('increment'),
@@ -31,10 +30,6 @@ __decorate([
     (0, typeorm_1.OneToMany)((_type) => _1.MedicalAppointment, (medicalApointment) => medicalApointment.patient),
     __metadata("design:type", Array)
 ], Patient.prototype, "medicalAppointments", void 0);
-__decorate([
-    (0, typeorm_1.OneToMany)((_type) => _1.MedicalRecord, (medicalRecord) => medicalRecord.patient),
-    __metadata("design:type", Array)
-], Patient.prototype, "medicalRecords", void 0);
 exports.Patient = Patient = __decorate([
     (0, typeorm_1.Entity)({ name: 'patients' })
 ], Patient);

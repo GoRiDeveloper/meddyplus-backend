@@ -7,7 +7,7 @@ const httpCodes_1 = require("../constants/httpCodes");
 const services_1 = require("../services");
 const msgs_1 = require("../constants/msgs");
 const user_types_1 = require("../types/user.types");
-const getDoctors = async (req, res, next) => {
+const getDoctors = async (_req, res, next) => {
     try {
         const [doctors, results] = await services_1.doctorService.findDoctors({
             user: {
