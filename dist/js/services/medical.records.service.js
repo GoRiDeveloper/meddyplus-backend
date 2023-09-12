@@ -41,5 +41,8 @@ class MedicalRecordService {
             throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.MEDICAL_RECORD_FAIL_SAVE, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR);
         }
     }
+    async findMedicalRecord(filters, attributes, relationAttributes, error) {
+        return (await this.entityFactory.findOne(filters, attributes, relationAttributes, error));
+    }
 }
 exports.MedicalRecordService = MedicalRecordService;

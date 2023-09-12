@@ -19,6 +19,9 @@ let PatientMedicalHistory = exports.PatientMedicalHistory = class PatientMedical
     symptoms;
     treatments;
     medication;
+    height;
+    bloodPressure;
+    weight;
     medicalRecord;
 };
 __decorate([
@@ -46,7 +49,19 @@ __decorate([
     __metadata("design:type", String)
 ], PatientMedicalHistory.prototype, "medication", void 0);
 __decorate([
-    (0, typeorm_1.OneToOne)((_type) => _1.MedicalRecord),
+    (0, typeorm_1.Column)({ type: 'int' }),
+    __metadata("design:type", Number)
+], PatientMedicalHistory.prototype, "height", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'text', name: 'blood_pressure' }),
+    __metadata("design:type", String)
+], PatientMedicalHistory.prototype, "bloodPressure", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'int' }),
+    __metadata("design:type", Number)
+], PatientMedicalHistory.prototype, "weight", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)((_type) => _1.MedicalRecord),
     (0, typeorm_1.JoinColumn)({ name: 'medical_record_id' }),
     __metadata("design:type", Number)
 ], PatientMedicalHistory.prototype, "medicalRecord", void 0);

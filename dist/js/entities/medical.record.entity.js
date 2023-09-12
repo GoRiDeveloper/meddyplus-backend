@@ -19,6 +19,7 @@ let MedicalRecord = exports.MedicalRecord = class MedicalRecord extends typeorm_
     previousMedicalConditions;
     familyMedicalHistory;
     patient;
+    patientMedicalHistory;
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)('increment'),
@@ -45,6 +46,10 @@ __decorate([
     (0, typeorm_1.JoinColumn)({ name: 'patient_id' }),
     __metadata("design:type", _1.Patient)
 ], MedicalRecord.prototype, "patient", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)((_type) => _1.PatientMedicalHistory, (patientMedicalHistory) => patientMedicalHistory.medicalRecord),
+    __metadata("design:type", Array)
+], MedicalRecord.prototype, "patientMedicalHistory", void 0);
 exports.MedicalRecord = MedicalRecord = __decorate([
     (0, typeorm_1.Entity)({ name: 'medical_records' })
 ], MedicalRecord);

@@ -61,11 +61,14 @@ class MedicalAppointmentDatesService {
     async toggleStatusMedicalAppointmentDate(id, sessionUser) {
         const doctorExists = await _1.doctorService.findDoctor({ user: { id: sessionUser.id } }, false, false, false);
         const date = await this.findMedicalAppointmentDate({ id }, false, { doctor: true }, true);
-        if (date.doctor.id !== doctorExists.id) {
-            throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.PERMISSION_DENIAD, httpCodes_1.HTTPCODES.BAD_REQUEST);
-        }
         if (!date) {
             throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.MEDICAL_APPOINTMENT_DATES_DATE_INVALID_FORMAT, httpCodes_1.HTTPCODES.NOT_FOUND);
+        }
+        if (doctorExists === null) {
+            throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.DOCTOR_WITHOUT_APPOINTMENTS, httpCodes_1.HTTPCODES.NOT_FOUND);
+        }
+        if (date.doctor.id !== doctorExists.id) {
+            throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.PERMISSION_DENIAD, httpCodes_1.HTTPCODES.BAD_REQUEST);
         }
         switch (date.status) {
             case medical_appointment_dates_types_1.MedicalAppointmentDatesStatus.selected:
@@ -78,16 +81,22 @@ class MedicalAppointmentDatesService {
                 date.status = medical_appointment_dates_types_1.MedicalAppointmentDatesStatus.cancelled;
                 break;
         }
-        // controlar en dado caso que falle la actualización
-        await this.updateMedicalAppointmentDate(date);
+        try {
+            await this.updateMedicalAppointmentDate(date);
+        }
+        catch (error) {
+            throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.TOGGLE_STATUS_MEDICAL_APPOINTMENT_DATE_FAIL, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR);
+        }
     }
     async findMedicalAppointmentDates(filters, attributes, relationAttributes) {
         return await this.entityFactory.findAll(filters, attributes, relationAttributes);
     }
     // Get para traer todas las fechas que un médico previamente subió al sistema
     async getAllMedicalAppoitmentDates(id) {
-        //controlar en dado caso que un médico no se haya creado en la bd
         const doctorExists = await _1.doctorService.findDoctor({ user: { id } }, false, false, false);
+        if (doctorExists === null) {
+            throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.DOCTOR_WITHOUT_APPOINTMENTS, httpCodes_1.HTTPCODES.NOT_FOUND);
+        }
         const filters = {
             doctor: { id: doctorExists.id },
             status: (0, typeorm_1.In)([
@@ -101,8 +110,10 @@ class MedicalAppointmentDatesService {
     }
     // Solo trae las fechas selected y pending
     async getAllMedicalAppoitmentDatesPendingAndSelected(id) {
-        // controlar en dado caso que el doctor no exista en la bd
         const doctorExists = await _1.doctorService.findDoctor({ user: { id } }, false, false, false);
+        if (doctorExists === null) {
+            throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.DOCTOR_WITHOUT_APPOINTMENTS, httpCodes_1.HTTPCODES.NOT_FOUND);
+        }
         const filters = {
             doctor: { id: doctorExists.id },
             status: (0, typeorm_1.In)([
