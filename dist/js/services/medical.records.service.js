@@ -45,7 +45,6 @@ class MedicalRecordService {
             throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.PATIENT_NOT_FOUND, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR);
         }
         try {
-            debugger;
             const verifyPatientAppointments = await _1.patientService.findPatient({
                 id: patient.id,
                 medicalAppointments: {
@@ -55,7 +54,7 @@ class MedicalRecordService {
                     }
                 }
             }, false, false, false);
-            console.log({verifyPatientAppointments});
+
             if (verifyPatientAppointments)
                 throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.MEDICAL_RECORD_EXISTS, httpCodes_1.HTTPCODES.BAD_REQUEST);
         }
