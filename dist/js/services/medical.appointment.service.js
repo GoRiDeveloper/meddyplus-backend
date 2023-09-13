@@ -47,13 +47,16 @@ class MedicalAppointmentService {
         }
         // crear un objeto para la tabla de medicalAppointment, asignarle en la clave medicalAppointmentDate la fecha que buscamos y actualizamos su estado
         // en el objeto para la tabla medicalAppointment asignarle en la clave patient, el paciente que creamos
-        const medicalAppoinment = {
+        const medicalAppoinmentToCreate = {
             description,
             medicalAppointmentDate,
             patient
         };
         // devolver la cita creada
-        return (await this.entityFactory.create(medicalAppoinment, false));
+        return {
+            medicalAppointment: (await this.entityFactory.create(medicalAppoinmentToCreate, false)),
+            patientId: patient.id
+        };
     }
     async findMedicalAppointments(filters, attributes, relationAttributes) {
         return await this.entityFactory.findAll(filters, attributes, relationAttributes);

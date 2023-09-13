@@ -2,8 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.highLevelUsersDto = exports.userDto = void 0;
 const userDto = (user) => {
-    const { firstName, lastName, telephone, dateOfBirth, genre, email, role } = user;
+    const { id, firstName, lastName, telephone, dateOfBirth, genre, email, role } = user;
     return {
+        id,
         firstName,
         lastName,
         email,

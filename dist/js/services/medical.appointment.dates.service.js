@@ -18,6 +18,7 @@ class MedicalAppointmentDatesService {
     async createMedicalAppointmentDates(sessionUser, date, hours) {
         const unifiedDates = (0, unify_dates_1.unifyDates)(date, hours);
         let doctorCreated;
+        let doctorId;
         const doctorExists = await _1.doctorService.findDoctor({ user: { id: sessionUser.id } }, false, false, false);
         if (!doctorExists) {
             const doctorToCreate = {
@@ -26,6 +27,10 @@ class MedicalAppointmentDatesService {
             doctorCreated = await _1.doctorService.createDoctor(doctorToCreate);
             if (!doctorCreated)
                 throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.CREATE_DOCTOR_SERVICE_FAIL, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR);
+            doctorId = doctorCreated.id;
+        }
+        if (doctorExists) {
+            doctorId = doctorExists.id;
         }
         const createDates = unifiedDates.map(async (date) => {
             const idToCompared = doctorExists?.id || doctorCreated?.id;
@@ -47,7 +52,10 @@ class MedicalAppointmentDatesService {
             }
             return dateFromDB;
         });
-        return await Promise.all(createDates);
+        return {
+            medicalAppointmentDates: await Promise.all(createDates),
+            doctorId
+        };
     }
     async findMedicalAppointmentDate(filters, attributes, relationAttributes, error) {
         return (await this.entityFactory.findOne(filters, attributes, relationAttributes, error));

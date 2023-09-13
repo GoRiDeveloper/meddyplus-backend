@@ -10,11 +10,12 @@ const createDates = async (req, res, next) => {
     try {
         const { sessionUser } = req;
         const { date, hours } = req.safeData?.body;
-        const medicalAppointmentDates = await services_1.medicalAppointmentDatesService.createMedicalAppointmentDates(sessionUser, date, hours);
+        const { medicalAppointmentDates, doctorId } = await services_1.medicalAppointmentDatesService.createMedicalAppointmentDates(sessionUser, date, hours);
         return res.status(httpCodes_1.HTTPCODES.CREATED).json({
             status: msgs_1.MESSAGES.SUCCESS,
             message: msgs_1.MESSAGES.MEDICAL_APPOINTMENT_DATE_CREATED,
-            medicalAppointmentDates
+            medicalAppointmentDates,
+            doctorId
         });
     }
     catch (err) {
@@ -30,7 +31,7 @@ const toggleStatusMedicalAppointmentDate = async (req, res, next) => {
     try {
         const { id } = req.params;
         await services_1.medicalAppointmentDatesService.toggleStatusMedicalAppointmentDate(id, req?.sessionUser);
-        res.status(httpCodes_1.HTTPCODES.NO_CONTENT).json({
+        return res.status(httpCodes_1.HTTPCODES.NO_CONTENT).json({
             status: msgs_1.MESSAGES.SUCCESS
         });
     }
@@ -47,7 +48,7 @@ const getAllDatesByDoctor = async (req, res, next) => {
     try {
         const { id } = req.sessionUser;
         const [dates, count] = await services_1.medicalAppointmentDatesService.getAllMedicalAppoitmentDates(id);
-        res.status(httpCodes_1.HTTPCODES.OK).json({
+        return res.status(httpCodes_1.HTTPCODES.OK).json({
             status: msgs_1.MESSAGES.SUCCESS,
             dates,
             count
@@ -82,7 +83,7 @@ const getAllHoursByDoctorDate = async (req, res, next) => {
                 };
                 return obj;
             });
-            res.status(httpCodes_1.HTTPCODES.OK).json({
+            return res.status(httpCodes_1.HTTPCODES.OK).json({
                 status: msgs_1.MESSAGES.SUCCESS,
                 hours
             });

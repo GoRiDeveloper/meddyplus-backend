@@ -11,6 +11,7 @@ const bcrypt_1 = require("../utils/bcrypt");
 const check_role_for_assignment_1 = require("../utils/check.role.for.assignment");
 const jwt_1 = require("../utils/jwt");
 const entity_factory_1 = require("./factory/entity.factory");
+const _1 = require(".");
 class UserService {
     entityFactory;
     constructor(userRepository) {
@@ -100,14 +101,31 @@ class UserService {
             role: true
         };
         const user = (await this.findUser({ email: loginData.email }, attributes, false, true));
-        const [, token] = await Promise.all([
-            (0, bcrypt_1.comparePasswords)(loginData.password, user.password),
-            (0, jwt_1.generateJWT)({ id: user.id })
-        ]);
-        return {
-            token,
-            user: (0, user_dto_1.userDto)(user)
-        };
+        try {
+            const [, token, isDoctor, isPatient] = await Promise.all([
+                (0, bcrypt_1.comparePasswords)(loginData.password, user.password),
+                (0, jwt_1.generateJWT)({ id: user.id }),
+                _1.doctorService.findDoctor({ user: { id: user.id } }, false, false, false),
+                _1.patientService.findPatient({ user: { id: user.id } }, false, false, false)
+            ]);
+            const userToReturn = (0, user_dto_1.userDto)(user);
+            if (isDoctor) {
+                userToReturn.doctorId = isDoctor.id;
+            }
+            if (isPatient) {
+                userToReturn.patientId = isPatient.id;
+            }
+            return {
+                token,
+                user: userToReturn
+            };
+        }
+        catch (err) {
+            if (err instanceof app_error_1.AppError) {
+                throw err;
+            }
+            throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.SIGNIN_FAIL, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR);
+        }
     }
     async updateUserPass(userToUpdate, passwords) {
         const { currentPassword, newPassword } = passwords;
