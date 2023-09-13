@@ -53,10 +53,12 @@ class MedicalRecordService {
                     }
                 }
             }, false, false, false);
+            console.log({verifyPatientAppointments});
             if (verifyPatientAppointments)
                 throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.MEDICAL_RECORD_EXISTS, httpCodes_1.HTTPCODES.BAD_REQUEST);
         }
         catch (err) {
+            console.log({err});
             if (err instanceof app_error_1.AppError) {
                 throw err;
             }
