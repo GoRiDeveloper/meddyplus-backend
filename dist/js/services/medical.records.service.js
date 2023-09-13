@@ -45,7 +45,9 @@ class MedicalRecordService {
             throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.PATIENT_NOT_FOUND, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR);
         }
         try {
+            debugger;
             const verifyPatientAppointments = await _1.patientService.findPatient({
+                id: patient.id,
                 medicalAppointments: {
                     medicalAppointmentDate: {
                         status: (0, typeorm_1.Not)(medical_appointment_dates_types_1.MedicalAppointmentDatesStatus.selected),
