@@ -66,6 +66,7 @@ class MedicalRecordService {
             return await this.entityFactory.create(medicalRecordToCreate, false);
         }
         catch (err) {
+            console.log(err)
             throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.MEDICAL_RECORD_FAIL_SAVE, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR);
         }
     }
