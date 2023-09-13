@@ -6,6 +6,8 @@ const errorMsgs_1 = require("../constants/errorMsgs");
 const httpCodes_1 = require("../constants/httpCodes");
 const app_error_1 = require("../utils/app.error");
 const entity_factory_1 = require("./factory/entity.factory");
+const typeorm_1 = require("typeorm");
+const medical_appointment_dates_types_1 = require("../types/medical.appointment.dates.types");
 class MedicalRecordService {
     entityFactory;
     constructor(medicalRecordRepository) {
@@ -45,7 +47,10 @@ class MedicalRecordService {
         try {
             const verifyPatientAppointments = await _1.patientService.findPatient({
                 medicalAppointments: {
-                    medicalAppointmentDate: { doctor: { user: { id: doctorId } } }
+                    medicalAppointmentDate: {
+                        status: (0, typeorm_1.Not)(medical_appointment_dates_types_1.MedicalAppointmentDatesStatus.selected),
+                        doctor: { user: { id: doctorId } }
+                    }
                 }
             }, false, false, false);
             if (verifyPatientAppointments)
