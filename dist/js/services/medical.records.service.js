@@ -27,8 +27,36 @@ class MedicalRecordService {
     //   )
     //   return medicalRecord
     // }
-    async createMedicalRecord(data, patientId) {
-        const patient = await _1.patientService.findPatient({ id: patientId }, false, false, false);
+    async createMedicalRecord(data, doctorId, patientId) {
+        let patient;
+        try {
+            patient = (await _1.patientService.findPatient({
+                id: patientId
+            }, false, false, false));
+            if (!patient)
+                throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.PATIENT_NOT_FOUND, httpCodes_1.HTTPCODES.NOT_FOUND);
+        }
+        catch (err) {
+            if (err instanceof app_error_1.AppError) {
+                throw err;
+            }
+            throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.PATIENT_NOT_FOUND, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR);
+        }
+        try {
+            const verifyPatientAppointments = await _1.patientService.findPatient({
+                medicalAppointments: {
+                    medicalAppointmentDate: { doctor: { user: { id: doctorId } } }
+                }
+            }, false, false, false);
+            if (verifyPatientAppointments)
+                throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.MEDICAL_RECORD_EXISTS, httpCodes_1.HTTPCODES.BAD_REQUEST);
+        }
+        catch (err) {
+            if (err instanceof app_error_1.AppError) {
+                throw err;
+            }
+            throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.MEDICAL_RECORD_FAIL_FOUND, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR);
+        }
         const medicalRecordToCreate = {
             ...data,
             date: new Date().toLocaleDateString(),
@@ -43,6 +71,29 @@ class MedicalRecordService {
     }
     async findMedicalRecord(filters, attributes, relationAttributes, error) {
         return (await this.entityFactory.findOne(filters, attributes, relationAttributes, error));
+    }
+    async updateMedicalRecord(medicalRecordId, data) {
+        try {
+            // busco el medicalRecord por findOne mediante el id del medicalRecordSchema
+            const medicalRecord = await this.entityFactory.findOne({ id: medicalRecordId }, false, false, false);
+            // si el medicalRecord tiene un valor falsy, envia al usuario "El registro médico aún no se ha creado"
+            if (!medicalRecord) {
+                throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.MEDICAL_RECORD_NOT_FOUND, httpCodes_1.HTTPCODES.NOT_FOUND);
+            }
+        }
+        catch (err) {
+            if (err instanceof app_error_1.AppError) {
+                throw err;
+            }
+            throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.MEDICAL_RECORD_NOT_CREATED, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR);
+        }
+        data.id = medicalRecordId;
+        try {
+            await this.entityFactory.updateOne(data);
+        }
+        catch (err) {
+            throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.MEDICAL_RECORD_NOT_UPDATED, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR);
+        }
     }
 }
 exports.MedicalRecordService = MedicalRecordService;

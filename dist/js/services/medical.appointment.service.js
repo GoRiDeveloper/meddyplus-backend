@@ -55,5 +55,8 @@ class MedicalAppointmentService {
         // devolver la cita creada
         return (await this.entityFactory.create(medicalAppoinment, false));
     }
+    async findMedicalAppointments(filters, attributes, relationAttributes) {
+        return await this.entityFactory.findAll(filters, attributes, relationAttributes);
+    }
 }
 exports.MedicalAppointmentService = MedicalAppointmentService;

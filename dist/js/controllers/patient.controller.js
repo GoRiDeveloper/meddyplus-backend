@@ -1,11 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.patientInfo = exports.cancelPatientAppointment = exports.getPatient = exports.getPatients = void 0;
+exports.patientInfo = exports.cancelPatientAppointment = exports.getMedicalAppointmentsInfo = exports.getPatient = exports.getPatients = void 0;
 const errorMsgs_1 = require("../constants/errorMsgs");
 const httpCodes_1 = require("../constants/httpCodes");
 const msgs_1 = require("../constants/msgs");
 const services_1 = require("../services");
 const app_error_1 = require("../utils/app.error");
+const medical_appointment_dates_types_1 = require("../types/medical.appointment.dates.types");
 const getPatients = async (req, res, next) => {
     try {
         const { sessionUser } = req;
@@ -72,6 +73,36 @@ const getPatient = async (req, res, next) => {
     }
 };
 exports.getPatient = getPatient;
+const getMedicalAppointmentsInfo = async (req, res, next) => {
+    try {
+        const { doctorId, patientId } = req.safeData?.params;
+        const [, completedMedicalAppointments] = await services_1.medicalAppointmentService.findMedicalAppointments({
+            patient: {
+                user: {
+                    id: patientId
+                }
+            },
+            medicalAppointmentDate: {
+                status: medical_appointment_dates_types_1.MedicalAppointmentDatesStatus.completed,
+                doctor: {
+                    id: doctorId
+                }
+            }
+        }, false, false);
+        return res.status(httpCodes_1.HTTPCODES.OK).json({
+            status: msgs_1.MESSAGES.SUCCESS,
+            completedMedicalAppointments
+        });
+    }
+    catch (err) {
+        if (!(err instanceof app_error_1.AppError)) {
+            next(new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.MEDICAL_APPOINTMENTS_INFO_FAIL, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR));
+            return;
+        }
+        next(err);
+    }
+};
+exports.getMedicalAppointmentsInfo = getMedicalAppointmentsInfo;
 // Cancelar cita de parte del paciente
 const cancelPatientAppointment = async (req, res, next) => {
     try {
@@ -84,7 +115,9 @@ const cancelPatientAppointment = async (req, res, next) => {
     catch (err) {
         if (!(err instanceof app_error_1.AppError)) {
             next(new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.MEDICAL_APPOINTMENT_DATES_INVALID_TYPE, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR));
+            return;
         }
+        next(err);
     }
 };
 exports.cancelPatientAppointment = cancelPatientAppointment;

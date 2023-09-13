@@ -10,7 +10,7 @@ const createPatientMedicalHistory = async (req, res, next) => {
     try {
         const { safeData } = req;
         const patientMedicalHistory = await services_1.patientMedicalHistoryService.createPatientMedicalHistory(safeData?.body, safeData?.params.id);
-        res.status(httpCodes_1.HTTPCODES.CREATED).json({
+        return res.status(httpCodes_1.HTTPCODES.CREATED).json({
             status: msgs_1.MESSAGES.SUCCESS,
             patientMedicalHistory
         });
