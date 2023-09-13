@@ -32,5 +32,28 @@ class PatientMedicalHistoryService {
     async findAllPatientMedicalHistory(filters, attributes, relationAttributes) {
         return await this.entityFactory.findAll(filters, attributes, relationAttributes);
     }
+    async updatePatientMedicalHistory(patientMedicalHistoryId, data) {
+        try {
+            // Buscamos el patientMedicalHistory por findOne mediante el id del patientMedicalHistorySchema
+            const patientMedicalHistory = await this.entityFactory.findOne({ id: patientMedicalHistoryId }, false, false, false);
+            // Si el patientMedicalHistory no existe, lanzamos un error
+            if (!patientMedicalHistory) {
+                throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.PATIENT_MEDICAL_HISTORY_NOT_FOUND, httpCodes_1.HTTPCODES.NOT_FOUND);
+            }
+        }
+        catch (err) {
+            if (err instanceof app_error_1.AppError) {
+                throw err;
+            }
+            throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.PATIENT_MEDICAL_HISTORY_NOT_CREATED, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR);
+        }
+        data.id = patientMedicalHistoryId;
+        try {
+            await this.entityFactory.updateOne(data);
+        }
+        catch (err) {
+            throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.PATIENT_MEDICAL_HISTORY_NOT_UPDATED, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
 exports.PatientMedicalHistoryService = PatientMedicalHistoryService;

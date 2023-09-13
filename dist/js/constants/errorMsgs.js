@@ -69,5 +69,8 @@ var ERROR_MSGS;
     ERROR_MSGS["MEDICAL_APPOINTMENTS_INFO_FAIL"] = "No se pudo recuperar la informaci\u00F3n de las citas m\u00E9dicas debido a un error interno.";
     ERROR_MSGS["MEDICAL_RECORD_EXISTS"] = "El registro m\u00E9dico de este paciente ya existe.";
     ERROR_MSGS["MEDICAL_RECORD_FAIL_FOUND"] = "No se pudo comprobar la existencia del registro m\u00E9dico debido a un error interno.";
+    ERROR_MSGS["PATIENT_MEDICAL_HISTORY_NOT_FOUND"] = "No se encontr\u00F3 el historial m\u00E9dico del paciente.";
+    ERROR_MSGS["PATIENT_MEDICAL_HISTORY_NOT_CREATED"] = "El historial m\u00E9dico del paciente no se ha creado.";
+    ERROR_MSGS["PATIENT_MEDICAL_HISTORY_NOT_UPDATED"] = "El historial m\u00E9dico del paciente no fue actualizado.";
     ERROR_MSGS["SIGNIN_FAIL"] = "Ocurrio un error interno al iniciar sesi\u00F3n";
 })(ERROR_MSGS || (exports.ERROR_MSGS = ERROR_MSGS = {}));
