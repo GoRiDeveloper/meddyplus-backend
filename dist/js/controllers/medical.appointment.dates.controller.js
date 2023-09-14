@@ -112,7 +112,6 @@ const updateToCompletedDate = async (req, res, next) => {
             return;
         }
         next(err);
-        return;
     }
 };
 exports.updateToCompletedDate = updateToCompletedDate;

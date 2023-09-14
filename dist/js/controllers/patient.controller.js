@@ -33,7 +33,7 @@ const getPatients = async (req, res, next) => {
             },
             medicalAppointments: {
                 id: true,
-                MedicalAppointmentDate: { id: true, status: true, date: true }
+                medicalAppointmentDate: { id: true, status: true, date: true }
             }
         }, {
             user: true,

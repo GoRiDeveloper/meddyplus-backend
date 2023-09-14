@@ -1,6 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.patientMedicalHistoryService = exports.medicalRecordService = exports.patientService = exports.medicalAppointmentService = exports.doctorService = exports.medicalAppointmentDatesService = exports.userService = void 0;
+/**
+ * Este archivo es responsable de configurar y proporcionar servicios relacionados con las entidades médicas
+ * y repositorios necesarios para acceder a la base de datos.
+ */
 const entities_1 = require("../entities");
 const database_config_1 = require("./database/database.config");
 const doctor_service_1 = require("./doctor.service");
@@ -10,6 +14,7 @@ const medical_records_service_1 = require("./medical.records.service");
 const patient_medical_history_service_1 = require("./patient.medical.history.service");
 const patient_service_1 = require("./patient.service");
 const user_service_1 = require("./user.service");
+// Obtención de repositorios de la base de datos
 const userRepository = database_config_1.AppDataSrc.getRepository(entities_1.User);
 const patientRepository = database_config_1.AppDataSrc.getRepository(entities_1.Patient);
 const doctorRepository = database_config_1.AppDataSrc.getRepository(entities_1.Doctor);
