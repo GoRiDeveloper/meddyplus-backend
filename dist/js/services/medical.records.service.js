@@ -1,34 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MedicalRecordService = void 0;
+const typeorm_1 = require("typeorm");
 const _1 = require(".");
 const errorMsgs_1 = require("../constants/errorMsgs");
 const httpCodes_1 = require("../constants/httpCodes");
+const medical_appointment_dates_types_1 = require("../types/medical.appointment.dates.types");
 const app_error_1 = require("../utils/app.error");
 const entity_factory_1 = require("./factory/entity.factory");
-const typeorm_1 = require("typeorm");
-const medical_appointment_dates_types_1 = require("../types/medical.appointment.dates.types");
 class MedicalRecordService {
     entityFactory;
     constructor(medicalRecordRepository) {
         this.entityFactory = new entity_factory_1.EntityFactory(medicalRecordRepository);
     }
-    // servicio de prueba para verificar relaciones correctamente
-    // async getMedicalRecord(medicalRecordId: number): Promise<any> {
-    //   debugger
-    //   const relationAttrs = {
-    //     patient: {
-    //       medicalAppointments: { medicalAppointmentDate: { doctor: true } }
-    //     }
-    //   }
-    //   const medicalRecord = await this.entityFactory.findOne(
-    //     { id: medicalRecordId },
-    //     false,
-    //     relationAttrs,
-    //     false
-    //   )
-    //   return medicalRecord
-    // }
     async createMedicalRecord(data, doctorId, patientId) {
         let patient;
         try {
@@ -54,12 +38,10 @@ class MedicalRecordService {
                     }
                 }
             }, false, false, false);
-
             if (verifyPatientAppointments)
                 throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.MEDICAL_RECORD_EXISTS, httpCodes_1.HTTPCODES.BAD_REQUEST);
         }
         catch (err) {
-            console.log({err});
             if (err instanceof app_error_1.AppError) {
                 throw err;
             }
@@ -70,12 +52,14 @@ class MedicalRecordService {
             date: new Date().toLocaleDateString(),
             patient
         };
+        let medicalRecordCreated;
         try {
-            return await this.entityFactory.create(medicalRecordToCreate, false);
+            medicalRecordCreated = (await this.entityFactory.create(medicalRecordToCreate, false));
         }
         catch (err) {
             throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.MEDICAL_RECORD_FAIL_SAVE, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR);
         }
+        return medicalRecordCreated;
     }
     async findMedicalRecord(filters, attributes, relationAttributes, error) {
         return (await this.entityFactory.findOne(filters, attributes, relationAttributes, error));

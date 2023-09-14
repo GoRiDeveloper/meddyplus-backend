@@ -58,6 +58,9 @@ class MedicalAppointmentService {
             patientId: patient.id
         };
     }
+    async findMedicalAppointment(filters, attributes, relationAttributes, error) {
+        return (await this.entityFactory.findOne(filters, attributes, relationAttributes, error));
+    }
     async findMedicalAppointments(filters, attributes, relationAttributes) {
         return await this.entityFactory.findAll(filters, attributes, relationAttributes);
     }

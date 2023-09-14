@@ -73,4 +73,5 @@ var ERROR_MSGS;
     ERROR_MSGS["PATIENT_MEDICAL_HISTORY_NOT_CREATED"] = "El historial m\u00E9dico del paciente no se ha creado.";
     ERROR_MSGS["PATIENT_MEDICAL_HISTORY_NOT_UPDATED"] = "El historial m\u00E9dico del paciente no fue actualizado.";
     ERROR_MSGS["SIGNIN_FAIL"] = "Ocurrio un error interno al iniciar sesi\u00F3n";
+    ERROR_MSGS["MEDICAL_APPOINTMENT_DATE_UPDATE_FAIL"] = "No se pudo actualizar el estado de la cita m\u00E9dica debido a un error interno.";
 })(ERROR_MSGS || (exports.ERROR_MSGS = ERROR_MSGS = {}));

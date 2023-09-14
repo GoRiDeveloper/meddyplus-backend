@@ -124,7 +124,7 @@ exports.cancelPatientAppointment = cancelPatientAppointment;
 const patientInfo = async (req, res, next) => {
     try {
         const { id } = req.safeData?.params;
-        const { patientInfo, medicalRecordInfo, patientMedicalHistories } = await services_1.patientService.getPatientInfo(id);
+        const { patientInfo, medicalRecordInfo, patientMedicalHistories } = await services_1.patientService.getPatientInfo(id, req.sessionUser?.id);
         return res.status(httpCodes_1.HTTPCODES.OK).json({
             status: msgs_1.MESSAGES.SUCCESS,
             patientInfo,

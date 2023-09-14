@@ -52,14 +52,22 @@ class PatientService {
             throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.MEDICAL_APPOINTMENT_FAIL_UPDATE, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR);
         }
     }
-    async getPatientInfo(patientId) {
+    async getPatientInfo(patientId, doctorId) {
         let patientMedicalHistoryInfo;
         const medicalRecordInfo = await _1.medicalRecordService.findMedicalRecord({ patient: { id: patientId } }, false, false, false);
         if (medicalRecordInfo?.id) {
             patientMedicalHistoryInfo =
                 await _1.patientMedicalHistoryService.findAllPatientMedicalHistory({ medicalRecord: { id: medicalRecordInfo?.id } }, false, false);
         }
-        const patientInfo = await this.findPatient({ id: patientId }, {
+        const patientInfo = await this.findPatient({
+            id: patientId,
+            medicalAppointments: {
+                medicalAppointmentDate: {
+                    status: medical_appointment_dates_types_1.MedicalAppointmentDatesStatus.selected,
+                    doctor: { user: { id: doctorId } }
+                }
+            }
+        }, {
             user: {
                 id: true,
                 firstName: true,
@@ -68,8 +76,12 @@ class PatientService {
                 dateOfBirth: true,
                 telephone: true,
                 genre: true
+            },
+            medicalAppointments: {
+                id: true,
+                medicalAppointmentDate: { id: true, status: true }
             }
-        }, { user: true }, false);
+        }, { user: true, medicalAppointments: { medicalAppointmentDate: true } }, false);
         return {
             patientInfo,
             medicalRecordInfo,

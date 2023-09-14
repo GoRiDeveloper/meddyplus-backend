@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllHoursByDoctorDate = exports.getAllDatesByDoctor = exports.toggleStatusMedicalAppointmentDate = exports.createDates = void 0;
+exports.updateToCompletedDate = exports.getAllHoursByDoctorDate = exports.getAllDatesByDoctor = exports.toggleStatusMedicalAppointmentDate = exports.createDates = void 0;
 const errorMsgs_1 = require("../constants/errorMsgs");
 const httpCodes_1 = require("../constants/httpCodes");
 const msgs_1 = require("../constants/msgs");
@@ -98,3 +98,21 @@ const getAllHoursByDoctorDate = async (req, res, next) => {
     }
 };
 exports.getAllHoursByDoctorDate = getAllHoursByDoctorDate;
+const updateToCompletedDate = async (req, res, next) => {
+    try {
+        const { id } = req.safeData?.params;
+        await services_1.medicalAppointmentDatesService.completedAppointmentDate(id);
+        return res.status(httpCodes_1.HTTPCODES.NO_CONTENT).json({
+            status: msgs_1.MESSAGES.SUCCESS
+        });
+    }
+    catch (err) {
+        if (!(err instanceof app_error_1.AppError)) {
+            next(new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.MEDICAL_APPOINTMENT_DATE_UPDATE_FAIL, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR));
+            return;
+        }
+        next(err);
+        return;
+    }
+};
+exports.updateToCompletedDate = updateToCompletedDate;

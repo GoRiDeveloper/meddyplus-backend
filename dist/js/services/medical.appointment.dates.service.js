@@ -132,5 +132,17 @@ class MedicalAppointmentDatesService {
         const relationAttributes = { doctor: true };
         return await this.findMedicalAppointmentDates(filters, false, relationAttributes);
     }
+    async completedAppointmentDate(medicalAppoinmentDateId) {
+        const medicalAppoinmentDateToUpdate = {
+            id: medicalAppoinmentDateId,
+            status: medical_appointment_dates_types_1.MedicalAppointmentDatesStatus.completed
+        };
+        try {
+            await this.updateMedicalAppointmentDate(medicalAppoinmentDateToUpdate);
+        }
+        catch (err) {
+            throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.MEDICAL_APPOINTMENT_DATE_UPDATE_FAIL, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
 exports.MedicalAppointmentDatesService = MedicalAppointmentDatesService;
