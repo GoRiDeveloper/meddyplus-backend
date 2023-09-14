@@ -13,6 +13,7 @@ const getPatients = async (req, res, next) => {
         const [patients, results] = await services_1.patientService.findPatients({
             medicalAppointments: {
                 medicalAppointmentDate: {
+                    status: medical_appointment_dates_types_1.MedicalAppointmentDatesStatus.selected,
                     doctor: {
                         user: {
                             id: sessionUser?.id
@@ -29,9 +30,14 @@ const getPatients = async (req, res, next) => {
                 dateOfBirth: true,
                 telephone: true,
                 genre: true
+            },
+            medicalAppointments: {
+                id: true,
+                MedicalAppointmentDate: { id: true, status: true, date: true }
             }
         }, {
-            user: true
+            user: true,
+            medicalAppointments: { medicalAppointmentDate: true }
         });
         return res.status(httpCodes_1.HTTPCODES.OK).json({
             status: msgs_1.MESSAGES.SUCCESS,
