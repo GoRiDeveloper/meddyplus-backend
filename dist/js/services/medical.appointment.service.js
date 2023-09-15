@@ -25,7 +25,7 @@ class MedicalAppointmentService {
             if (medicalAppointmentsSelectedExists) {
             throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.MEDICAL_APPOINTMENT_SELECTED_EXISTS, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR);
         }
-        } catch (err) { console.log(err); };
+        } catch (err) { throw err };
         
         const medicalAppointmentDate = await _1.medicalAppointmentDatesService.findMedicalAppointmentDate({
             id: medicalAppoinmentDateId,
