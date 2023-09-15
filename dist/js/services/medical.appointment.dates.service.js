@@ -103,7 +103,7 @@ class MedicalAppointmentDatesService {
     async getAllMedicalAppoitmentDates(id) {
         const doctorExists = await _1.doctorService.findDoctor({ user: { id } }, false, false, false);
         if (doctorExists === null) {
-            throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.DOCTOR_WITHOUT_APPOINTMENTS, httpCodes_1.HTTPCODES.NOT_FOUND);
+            return [[], 0];
         }
         const filters = {
             doctor: { id: doctorExists.id },
@@ -120,7 +120,7 @@ class MedicalAppointmentDatesService {
     async getAllMedicalAppoitmentDatesPendingAndSelected(id) {
         const doctorExists = await _1.doctorService.findDoctor({ user: { id } }, false, false, false);
         if (doctorExists === null) {
-            throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.DOCTOR_WITHOUT_APPOINTMENTS, httpCodes_1.HTTPCODES.NOT_FOUND);
+            return [[]];
         }
         const filters = {
             doctor: { id: doctorExists.id },

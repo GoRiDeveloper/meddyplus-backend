@@ -9,7 +9,7 @@ const app_error_1 = require("../utils/app.error");
 const createMedicalAppointment = async (req, res, next) => {
     try {
         const { sessionUser, safeData } = req;
-        const { medicalAppointment, patientId } = await services_1.medicalAppointmentService.createMedicalAppointment(sessionUser, safeData?.params.id, safeData?.body.description);
+        const { medicalAppointment, patientId } = await services_1.medicalAppointmentService.createMedicalAppointment(sessionUser, safeData?.params.id, safeData?.params.doctorId, safeData?.body.description);
         return res.status(httpCodes_1.HTTPCODES.CREATED).json({
             status: msgs_1.MESSAGES.SUCCESS,
             medicalAppointment,

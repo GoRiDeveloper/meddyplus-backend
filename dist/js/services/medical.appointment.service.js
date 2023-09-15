@@ -12,8 +12,18 @@ class MedicalAppointmentService {
     constructor(medicalAppointmentRepository) {
         this.entityFactory = new entity_factory_1.EntityFactory(medicalAppointmentRepository);
     }
-    async createMedicalAppointment(sessionUser, medicalAppoinmentDateId, description) {
+    async createMedicalAppointment(sessionUser, medicalAppoinmentDateId, doctorId, description) {
         // buscar la fecha de la cita y cambiar/actualizar su estado a selected
+        const medicalAppointmentsSelectedExists = await this.findMedicalAppointment({
+            patient: { user: { id: sessionUser.id } },
+            medicalAppoinmentDate: {
+                status: medical_appointment_dates_types_1.MedicalAppointmentDatesStatus.selected,
+                doctor: { id: doctorId }
+            }
+        }, false, false, false);
+        if (medicalAppointmentsSelectedExists) {
+            throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.MEDICAL_APPOINTMENT_SELECTED_EXISTS, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR);
+        }
         const medicalAppointmentDate = await _1.medicalAppointmentDatesService.findMedicalAppointmentDate({
             id: medicalAppoinmentDateId,
             status: medical_appointment_dates_types_1.MedicalAppointmentDatesStatus.pending
