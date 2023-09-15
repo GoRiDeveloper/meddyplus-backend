@@ -14,13 +14,15 @@ class MedicalAppointmentService {
     }
     async createMedicalAppointment(sessionUser, medicalAppoinmentDateId, doctorId, description) {
         // buscar la fecha de la cita y cambiar/actualizar su estado a selected
-        const medicalAppointmentsSelectedExists = await this.findMedicalAppointment({
+        try {
+            const medicalAppointmentsSelectedExists = await this.findMedicalAppointment({
             patient: { user: { id: sessionUser.id } },
             medicalAppoinmentDate: {
                 status: medical_appointment_dates_types_1.MedicalAppointmentDatesStatus.selected,
                 doctor: { id: doctorId }
             }
         }, false, false, false);
+        } catch (err) { console.log(err); };
         if (medicalAppointmentsSelectedExists) {
             throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.MEDICAL_APPOINTMENT_SELECTED_EXISTS, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR);
         }
