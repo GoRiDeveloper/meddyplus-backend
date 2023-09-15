@@ -21,10 +21,10 @@ class MedicalAppointmentService {
                 status: medical_appointment_dates_types_1.MedicalAppointmentDatesStatus.selected,
                 doctor: { id: doctorId }
             }
-                if (medicalAppointmentsSelectedExists) {
+        }, false, false, false);
+            if (medicalAppointmentsSelectedExists) {
             throw new app_error_1.AppError(errorMsgs_1.ERROR_MSGS.MEDICAL_APPOINTMENT_SELECTED_EXISTS, httpCodes_1.HTTPCODES.INTERNAL_SERVER_ERROR);
         }
-        }, false, false, false);
         } catch (err) { console.log(err); };
         
         const medicalAppointmentDate = await _1.medicalAppointmentDatesService.findMedicalAppointmentDate({
