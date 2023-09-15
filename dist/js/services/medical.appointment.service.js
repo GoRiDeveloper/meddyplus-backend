@@ -17,7 +17,7 @@ class MedicalAppointmentService {
         try {
             const medicalAppointmentsSelectedExists = await this.findMedicalAppointment({
             patient: { user: { id: sessionUser.id } },
-            medicalAppoinmentDate: {
+            medicalAppointmentDate: {
                 status: medical_appointment_dates_types_1.MedicalAppointmentDatesStatus.selected,
                 doctor: { id: doctorId }
             }
