@@ -43,12 +43,14 @@ exports.userSchema = zod_1.default.object({
             const filters = {
                 email
             };
-            const userExists = await services_1.userService.findUser(filters, false, false, false);
-            if (userExists)
-                ctx.addIssue({
-                    code: zod_1.default.ZodIssueCode.custom,
-                    message: msgs_1.MESSAGES.EMAIL_ALREADY_REGISTERED
-                });
+            try {
+                const userExists = await services_1.userService.findUser(filters, false, false, false);
+                if (userExists)
+                    ctx.addIssue({
+                        code: zod_1.default.ZodIssueCode.custom,
+                        message: msgs_1.MESSAGES.EMAIL_ALREADY_REGISTERED
+                    });
+            } catch (e) { throw e };
         }),
         genre: zod_1.default.enum([user_types_1.UserGenre.female, user_types_1.UserGenre.male], {
             required_error: msgs_1.MESSAGES.GENRE_REQUIRED_ERROR,
